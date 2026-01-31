@@ -1,0 +1,424 @@
+@import "tailwindcss";
+
+/* Cyberpunk Neon Theme Variables */
+:root {
+  /* Background colors */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: rgba(18, 18, 26, 0.8);
+
+  /* Neon colors */
+  --neon-cyan: #00fff5;
+  --neon-magenta: #ff00ff;
+  --neon-purple: #8b5cf6;
+  --neon-blue: #3b82f6;
+  --neon-pink: #ec4899;
+  --neon-green: #10b981;
+
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Gradients */
+  --gradient-neon: linear-gradient(135deg, #00fff5, #8b5cf6, #ff00ff);
+  --gradient-button: linear-gradient(90deg, #00fff5, #8b5cf6);
+
+  /* Glow effects */
+  --glow-cyan: 0 0 10px #00fff5, 0 0 20px rgba(0, 255, 245, 0.5);
+  --glow-magenta: 0 0 10px #ff00ff, 0 0 20px rgba(255, 0, 255, 0.5);
+  --glow-purple: 0 0 10px #8b5cf6, 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Cyber Grid Background */
+.cyber-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 245, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 245, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes grid-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+/* Scan Line Effect */
+.scan-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 245, 0.5),
+    transparent
+  );
+  animation: scan-line 8s linear infinite;
+  pointer-events: none;
+  z-index: 100;
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Cyber Card */
+.cyber-card {
+  background: rgba(18, 18, 26, 0.8);
+  border: 1px solid rgba(0, 255, 245, 0.2);
+  border-radius: 12px;
+  box-shadow:
+    0 0 15px rgba(0, 255, 245, 0.05),
+    inset 0 0 30px rgba(0, 255, 245, 0.02);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.cyber-card:hover {
+  border-color: rgba(0, 255, 245, 0.4);
+  box-shadow:
+    0 0 30px rgba(0, 255, 245, 0.1),
+    inset 0 0 30px rgba(0, 255, 245, 0.03);
+}
+
+.cyber-card-magenta {
+  border-color: rgba(255, 0, 255, 0.2);
+  box-shadow:
+    0 0 15px rgba(255, 0, 255, 0.05),
+    inset 0 0 30px rgba(255, 0, 255, 0.02);
+}
+
+.cyber-card-magenta:hover {
+  border-color: rgba(255, 0, 255, 0.4);
+  box-shadow:
+    0 0 30px rgba(255, 0, 255, 0.1),
+    inset 0 0 30px rgba(255, 0, 255, 0.03);
+}
+
+/* Cyber Button */
+.cyber-button {
+  background: linear-gradient(90deg, #00fff5, #8b5cf6);
+  color: #0a0a0f;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 6px;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cyber-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: translateX(-100%);
+  animation: cyber-shine 3s infinite;
+}
+
+@keyframes cyber-shine {
+  0% { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(100%); }
+}
+
+.cyber-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 255, 245, 0.4);
+}
+
+.cyber-button:active {
+  transform: translateY(0);
+}
+
+.cyber-button-secondary {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 245, 0.5);
+  color: var(--neon-cyan);
+}
+
+.cyber-button-secondary:hover {
+  background: rgba(0, 255, 245, 0.1);
+  box-shadow: 0 0 20px rgba(0, 255, 245, 0.2);
+}
+
+/* Cyber Input */
+.cyber-input {
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid rgba(0, 255, 245, 0.2);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.cyber-input::placeholder {
+  color: var(--text-muted);
+}
+
+.cyber-input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 245, 0.2);
+}
+
+/* Cyber Textarea */
+.cyber-textarea {
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid rgba(0, 255, 245, 0.2);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 16px;
+  resize: vertical;
+  min-height: 120px;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+.cyber-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.cyber-textarea:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 245, 0.2);
+}
+
+/* Cyber Slider */
+.cyber-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 255, 245, 0.2);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cyber-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00fff5, #8b5cf6);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 245, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.cyber-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 20px rgba(0, 255, 245, 0.7);
+}
+
+.cyber-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00fff5, #8b5cf6);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 245, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Glitch Effect */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--neon-magenta);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: 2px 0 var(--neon-cyan);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(10px, 9999px, 31px, 0); }
+  5% { clip: rect(70px, 9999px, 71px, 0); }
+  10% { clip: rect(25px, 9999px, 30px, 0); }
+  15% { clip: rect(90px, 9999px, 95px, 0); }
+  20% { clip: rect(45px, 9999px, 55px, 0); }
+  25% { clip: rect(5px, 9999px, 20px, 0); }
+  30% { clip: rect(60px, 9999px, 80px, 0); }
+  35% { clip: rect(30px, 9999px, 45px, 0); }
+  40% { clip: rect(85px, 9999px, 100px, 0); }
+  45% { clip: rect(15px, 9999px, 25px, 0); }
+  50% { clip: rect(50px, 9999px, 65px, 0); }
+  55% { clip: rect(35px, 9999px, 50px, 0); }
+  60% { clip: rect(75px, 9999px, 90px, 0); }
+  65% { clip: rect(20px, 9999px, 35px, 0); }
+  70% { clip: rect(55px, 9999px, 70px, 0); }
+  75% { clip: rect(40px, 9999px, 55px, 0); }
+  80% { clip: rect(80px, 9999px, 95px, 0); }
+  85% { clip: rect(10px, 9999px, 25px, 0); }
+  90% { clip: rect(65px, 9999px, 80px, 0); }
+  95% { clip: rect(45px, 9999px, 60px, 0); }
+  100% { clip: rect(25px, 9999px, 40px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(65px, 9999px, 80px, 0); }
+  5% { clip: rect(30px, 9999px, 45px, 0); }
+  10% { clip: rect(85px, 9999px, 100px, 0); }
+  15% { clip: rect(15px, 9999px, 30px, 0); }
+  20% { clip: rect(50px, 9999px, 65px, 0); }
+  25% { clip: rect(75px, 9999px, 90px, 0); }
+  30% { clip: rect(20px, 9999px, 35px, 0); }
+  35% { clip: rect(55px, 9999px, 70px, 0); }
+  40% { clip: rect(10px, 9999px, 25px, 0); }
+  45% { clip: rect(40px, 9999px, 55px, 0); }
+  50% { clip: rect(70px, 9999px, 85px, 0); }
+  55% { clip: rect(25px, 9999px, 40px, 0); }
+  60% { clip: rect(60px, 9999px, 75px, 0); }
+  65% { clip: rect(5px, 9999px, 20px, 0); }
+  70% { clip: rect(45px, 9999px, 60px, 0); }
+  75% { clip: rect(80px, 9999px, 95px, 0); }
+  80% { clip: rect(35px, 9999px, 50px, 0); }
+  85% { clip: rect(65px, 9999px, 80px, 0); }
+  90% { clip: rect(15px, 9999px, 30px, 0); }
+  95% { clip: rect(50px, 9999px, 65px, 0); }
+  100% { clip: rect(90px, 9999px, 105px, 0); }
+}
+
+/* Neon Text */
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+}
+
+.neon-text-magenta {
+  color: var(--neon-magenta);
+  text-shadow: 0 0 10px var(--neon-magenta), 0 0 20px var(--neon-magenta);
+}
+
+.neon-text-purple {
+  color: var(--neon-purple);
+  text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--gradient-neon);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Status Indicators */
+.status-online {
+  width: 8px;
+  height: 8px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--neon-green);
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+.status-offline {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+@keyframes pulse-neon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 245, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 245, 0.5);
+}
+
+/* Utility classes */
+.backdrop-cyber {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Loading Spinner */
+.cyber-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid transparent;
+  border-top-color: var(--neon-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: relative;
+}
+
+.cyber-spinner::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 3px solid transparent;
+  border-top-color: var(--neon-magenta);
+  border-radius: 50%;
+  animation: spin 2s linear reverse infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
