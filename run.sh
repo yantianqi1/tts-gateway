@@ -299,9 +299,10 @@ start_qwen_tts() {
     nohup python -m uvicorn backend.main:app --host 0.0.0.0 --port $QWEN_TTS_PORT > "$LOG_DIR/qwen3-tts.log" 2>&1 &
     echo $! > "$PID_DIR/qwen3-tts.pid"
 
-    # 等待启动（模型加载可能较慢）
-    log_info "等待 Qwen3-TTS 加载模型..."
-    if wait_for_port $QWEN_TTS_PORT "Qwen3-TTS" 120; then
+    # 等待启动（首次下载模型 + CPU 加载可能需要较长时间）
+    local startup_timeout="${TTS_GATEWAY_QWEN_STARTUP_TIMEOUT:-300}"
+    log_info "等待 Qwen3-TTS 加载模型 (超时: ${startup_timeout}秒)..."
+    if wait_for_port $QWEN_TTS_PORT "Qwen3-TTS" "$startup_timeout"; then
         log_info "Qwen3-TTS 启动成功: http://localhost:$QWEN_TTS_PORT"
     else
         log_error "Qwen3-TTS 启动失败，请检查日志: $LOG_DIR/qwen3-tts.log"
@@ -336,9 +337,10 @@ start_indextts() {
     nohup python -m uvicorn app.main:app --host 0.0.0.0 --port $INDEXTTS_PORT > "$LOG_DIR/indextts.log" 2>&1 &
     echo $! > "$PID_DIR/indextts.pid"
 
-    # 等待启动（模型加载可能较慢）
-    log_info "等待 IndexTTS 加载模型..."
-    if wait_for_port $INDEXTTS_PORT "IndexTTS" 120; then
+    # 等待启动（首次下载模型 + 加载可能需要较长时间）
+    local startup_timeout="${TTS_GATEWAY_INDEXTTS_STARTUP_TIMEOUT:-300}"
+    log_info "等待 IndexTTS 加载模型 (超时: ${startup_timeout}秒)..."
+    if wait_for_port $INDEXTTS_PORT "IndexTTS" "$startup_timeout"; then
         log_info "IndexTTS 启动成功: http://localhost:$INDEXTTS_PORT"
     else
         log_error "IndexTTS 启动失败，请检查日志: $LOG_DIR/indextts.log"
