@@ -10,10 +10,10 @@ interface MobileNavProps {
 }
 
 const navItems = [
-  { href: '/studio', icon: Mic2, label: '工作室' },
-  { href: '/voices', icon: Users, label: '音色' },
-  { href: '/history', icon: History, label: '历史' },
-  { href: '/settings', icon: Settings, label: '设置' },
+  { href: '/studio', icon: Mic2, label: 'Studio' },
+  { href: '/voices', icon: Users, label: 'Voices' },
+  { href: '/history', icon: History, label: 'History' },
+  { href: '/settings', icon: Settings, label: 'Config' },
 ];
 
 export default function MobileNav({ className = '' }: MobileNavProps) {
@@ -21,7 +21,7 @@ export default function MobileNav({ className = '' }: MobileNavProps) {
 
   return (
     <nav
-      className={`fixed bottom-0 left-0 right-0 bg-cyber-bg-secondary/95 backdrop-blur-xl border-t border-neon-cyan/20 z-50 ${className}`}
+      className={`fixed bottom-0 left-0 right-0 bg-cyber-bg-secondary/90 backdrop-blur-xl border-t border-neon-purple/10 z-50 ${className}`}
     >
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
@@ -33,11 +33,11 @@ export default function MobileNav({ className = '' }: MobileNavProps) {
               <motion.div
                 whileTap={{ scale: 0.9 }}
                 className={`
-                  flex flex-col items-center gap-1 py-2 px-3 rounded-xl
+                  flex flex-col items-center gap-1 py-2 px-3 rounded-md
                   transition-all duration-300
                   ${isActive
-                    ? 'text-neon-cyan'
-                    : 'text-slate-500'
+                    ? 'text-neon-purple'
+                    : 'text-zinc-500'
                   }
                 `}
               >
@@ -45,16 +45,16 @@ export default function MobileNav({ className = '' }: MobileNavProps) {
                   <Icon className="w-5 h-5" />
                   {isActive && (
                     <>
-                      <div className="absolute inset-0 blur-md bg-neon-cyan/50 rounded-full" />
+                      <div className="absolute inset-0 blur-md bg-neon-purple/50 rounded-full" />
                       <motion.div
                         layoutId="mobileActiveIndicator"
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-neon-cyan"
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-neon-purple"
                         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                       />
                     </>
                   )}
                 </div>
-                <span className={`text-[10px] font-medium ${isActive ? 'text-neon-cyan' : ''}`}>
+                <span className={`text-[9px] font-mono uppercase tracking-wider ${isActive ? 'text-neon-purple' : ''}`}>
                   {item.label}
                 </span>
               </motion.div>

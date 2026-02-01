@@ -30,8 +30,9 @@ export default function RootLayout({
         <title>TTS Gateway - Cyberpunk Voice Studio</title>
         <meta name="description" content="Unified TTS Gateway with Qwen3-TTS and IndexTTS 2.0" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* JetBrains Mono for code/tech aesthetic */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

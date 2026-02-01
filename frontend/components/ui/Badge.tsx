@@ -8,17 +8,17 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variants = {
-  default: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-  success: 'bg-neon-green/20 text-neon-green border-neon-green/30',
-  warning: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  error: 'bg-red-500/20 text-red-400 border-red-500/30',
-  info: 'bg-neon-cyan/20 text-neon-cyan border-neon-cyan/30',
-  purple: 'bg-neon-purple/20 text-neon-purple border-neon-purple/30',
+  default: 'bg-zinc-800/50 text-zinc-400 border-zinc-700/30',
+  success: 'bg-neon-green/10 text-neon-green border-neon-green/20',
+  warning: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  error: 'bg-red-500/10 text-red-400 border-red-500/20',
+  info: 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/20',
+  purple: 'bg-neon-purple/10 text-neon-purple border-neon-purple/20',
 };
 
 const sizes = {
-  sm: 'text-[10px] px-2 py-0.5',
-  md: 'text-xs px-2.5 py-1',
+  sm: 'text-[9px] px-2 py-0.5',
+  md: 'text-[10px] px-2.5 py-1',
 };
 
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
@@ -27,7 +27,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       <span
         ref={ref}
         className={`
-          inline-flex items-center font-medium rounded-full border
+          inline-flex items-center font-mono uppercase tracking-wider rounded-sm border
           ${variants[variant]}
           ${sizes[size]}
           ${className}

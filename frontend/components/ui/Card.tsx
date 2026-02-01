@@ -7,28 +7,30 @@ interface CardProps extends HTMLMotionProps<'div'> {
   variant?: 'default' | 'magenta' | 'purple' | 'glass';
   hover?: boolean;
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  scanLine?: boolean;
 }
 
 const variants = {
   default: 'cyber-card',
   magenta: 'cyber-card-magenta',
   purple: 'cyber-card border-neon-purple/20 hover:border-neon-purple/40',
-  glass: 'bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl',
+  glass: 'bg-cyber-bg-secondary/30 backdrop-blur-xl border border-zinc-800/50 rounded-md',
 };
 
 const paddings = {
   none: '',
   sm: 'p-3',
   md: 'p-4',
-  lg: 'p-6',
+  lg: 'p-5',
 };
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
   (
     {
       variant = 'default',
-      hover = true,
+      hover = false,
       padding = 'md',
+      scanLine = false,
       className = '',
       children,
       ...props
@@ -42,10 +44,15 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         className={`
           ${variants[variant]}
           ${paddings[padding]}
+          relative overflow-hidden
           ${className}
         `}
         {...props}
       >
+        {/* Scan line effect */}
+        {scanLine && <div className="card-scan-line" />}
+
+        {/* Content */}
         {children}
       </motion.div>
     );

@@ -109,15 +109,15 @@ export default function AudioPlayer({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`flex items-center gap-3 p-3 bg-cyber-bg-secondary/50 rounded-xl ${className}`}>
+    <div className={`flex items-center gap-3 p-3 bg-cyber-surface/50 rounded-md border border-zinc-800/30 ${className}`}>
       <audio ref={audioRef} src={src} preload="metadata" />
 
       {/* Play/Pause button */}
       <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={togglePlay}
-        className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-cyan to-neon-purple flex items-center justify-center cursor-pointer"
+        className="w-10 h-10 rounded-md bg-gradient-to-br from-neon-purple to-neon-cyan flex items-center justify-center cursor-pointer"
       >
         {isPlaying ? (
           <Pause className="w-4 h-4 text-cyber-bg" />
@@ -131,23 +131,23 @@ export default function AudioPlayer({
         <div
           ref={progressRef}
           onClick={handleProgressClick}
-          className="h-2 bg-white/10 rounded-full cursor-pointer overflow-hidden relative"
+          className="h-2 bg-zinc-800/50 rounded-sm cursor-pointer overflow-hidden relative"
         >
           {/* Played progress */}
           <motion.div
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-full"
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-neon-purple to-neon-cyan rounded-sm"
             style={{ width: `${progressPercent}%` }}
           />
 
-          {/* Hover glow */}
+          {/* Glow effect */}
           <div
-            className="absolute inset-y-0 left-0 bg-neon-cyan/30 rounded-full transition-all duration-100"
+            className="absolute inset-y-0 left-0 bg-neon-purple/30 rounded-sm transition-all duration-100"
             style={{ width: `${progressPercent}%`, filter: 'blur(4px)' }}
           />
         </div>
 
         {/* Time display */}
-        <div className="flex justify-between text-[10px] text-slate-500">
+        <div className="flex justify-between text-[9px] text-zinc-600 font-mono">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -158,7 +158,7 @@ export default function AudioPlayer({
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleMute}
-        className="p-2 text-slate-400 hover:text-white transition-colors cursor-pointer"
+        className="p-2 text-zinc-500 hover:text-neon-purple transition-colors cursor-pointer"
       >
         {isMuted ? (
           <VolumeX className="w-4 h-4" />

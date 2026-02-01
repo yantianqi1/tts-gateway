@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mic2, Gauge } from 'lucide-react';
+import { Mic2, Gauge, Terminal } from 'lucide-react';
 import { useTTSStore } from '@/lib/store/ttsStore';
 import TextInput from '@/components/studio/TextInput';
 import ModelSelector from '@/components/studio/ModelSelector';
@@ -24,25 +24,33 @@ export default function StudioPage() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-gradient-to-br from-neon-cyan to-neon-purple rounded-xl">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="p-2.5 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-md">
             <Mic2 className="w-6 h-6 text-cyber-bg" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold gradient-text">语音工作室</h1>
-            <p className="text-sm text-slate-500">创建高质量的 AI 语音</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold gradient-text tracking-tight">Voice Studio</h1>
+              <span className="text-[10px] font-mono text-zinc-600 bg-zinc-800/50 px-2 py-0.5 rounded">
+                SYNTH_MODULE
+              </span>
+            </div>
+            <p className="text-sm text-zinc-500 font-mono mt-0.5">
+              <Terminal className="w-3 h-3 inline mr-1" />
+              High-quality AI voice synthesis
+            </p>
           </div>
         </div>
       </motion.div>
 
       {/* Main Content - Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
         {/* Left Panel - Creation Settings (3/5) */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="lg:col-span-3 space-y-6"
+          className="lg:col-span-3 space-y-5"
         >
           {/* Text Input */}
           <Card variant="default" padding="lg">
@@ -80,8 +88,14 @@ export default function StudioPage() {
           {/* Speed Control */}
           <Card variant="default" padding="lg">
             <div className="flex items-center gap-2 mb-4">
-              <Gauge className="w-4 h-4 text-neon-cyan" />
-              <span className="text-sm font-medium text-slate-300">语速控制</span>
+              <div className="w-2 h-2 rounded-sm bg-gradient-to-br from-neon-purple to-neon-cyan" />
+              <Gauge className="w-4 h-4 text-neon-purple" />
+              <span className="text-sm font-medium text-zinc-300 uppercase tracking-wide">
+                Speed Control
+              </span>
+              <span className="text-[9px] font-mono text-zinc-600 ml-auto">
+                RATE_MOD
+              </span>
             </div>
             <Slider
               min={0.5}
@@ -90,7 +104,7 @@ export default function StudioPage() {
               value={config.speed}
               onChange={(e) => setConfig({ speed: parseFloat(e.target.value) })}
               valueFormatter={(v) => `${v.toFixed(1)}x`}
-              hint="调整语音播放速度，1.0 为正常速度"
+              hint="Adjust playback speed, 1.0 = normal"
             />
           </Card>
 
