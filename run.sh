@@ -128,17 +128,25 @@ activate_venv() {
 # 检查端口是否被占用
 check_port() {
     local port=$1
-    if lsof -ti:$port >/dev/null 2>&1; then
-        return 0  # 端口被占用
-    else
-        return 1  # 端口空闲
+    # 优先使用 ss，其次 netstat，最后 lsof
+    if command -v ss &>/dev/null; then
+        ss -tuln | grep -q ":$port " && return 0
+    elif command -v netstat &>/dev/null; then
+        netstat -tuln | grep -q ":$port " && return 0
+    elif lsof -ti:$port >/dev/null 2>&1; then
+        return 0
     fi
+    return 1  # 端口空闲
 }
 
 # 获取端口对应的 PID
 get_port_pid() {
     local port=$1
-    lsof -ti:$port 2>/dev/null || echo ""
+    if command -v ss &>/dev/null; then
+        ss -tlnp | grep ":$port " | grep -oP 'pid=\K[0-9]+' | head -1
+    else
+        lsof -ti:$port 2>/dev/null | head -1
+    fi
 }
 
 # 停止指定端口的进程
