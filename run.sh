@@ -81,6 +81,12 @@ print_menu() {
     echo -e "${CYAN}│${NC}  ${GREEN}7)${NC} ⏹️  停止前端                                           ${CYAN}│${NC}"
     echo -e "${CYAN}│${NC}  ${GREEN}8)${NC} ⏹️  停止后端                                           ${CYAN}│${NC}"
     echo -e "${CYAN}├────────────────────────────────────────────────────────────┤${NC}"
+    echo -e "${CYAN}│${NC}  ${YELLOW}单独启动后端服务 (自动创建环境+拉取模型):${NC}               ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}  ${GREEN}14)${NC} 🎤 启动 Qwen3-TTS 后端                               ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}  ${GREEN}15)${NC} 🎧 启动 IndexTTS 后端                                ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}  ${GREEN}16)${NC} ⏹️  停止 Qwen3-TTS                                    ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}  ${GREEN}17)${NC} ⏹️  停止 IndexTTS                                     ${CYAN}│${NC}"
+    echo -e "${CYAN}├────────────────────────────────────────────────────────────┤${NC}"
     echo -e "${CYAN}│${NC}  ${GREEN}9)${NC} 📊 查看服务状态                                       ${CYAN}│${NC}"
     echo -e "${CYAN}│${NC} ${GREEN}10)${NC} 📜 查看日志                                           ${CYAN}│${NC}"
     echo -e "${CYAN}│${NC} ${GREEN}11)${NC} 📺 合并显示所有日志 (单终端)                          ${CYAN}│${NC}"
@@ -733,6 +739,238 @@ install_deps() {
 }
 
 # ============================================
+# 虚拟环境和模型管理
+# ============================================
+
+# 创建虚拟环境
+create_venv() {
+    local venv_path="$1"
+    local name="$2"
+
+    if [ -d "$venv_path" ]; then
+        log_info "$name 虚拟环境已存在"
+        return 0
+    fi
+
+    log_info "创建 $name 虚拟环境: $venv_path"
+    python3 -m venv "$venv_path"
+
+    if [ -d "$venv_path" ]; then
+        log_info "$name 虚拟环境创建成功"
+        return 0
+    else
+        log_error "$name 虚拟环境创建失败"
+        return 1
+    fi
+}
+
+# 设置 Qwen3-TTS 环境
+setup_qwen_tts_env() {
+    log_step "设置 Qwen3-TTS 环境..."
+    echo ""
+
+    if [ ! -d "$QWEN_TTS_DIR" ]; then
+        log_error "Qwen3-TTS 目录不存在: $QWEN_TTS_DIR"
+        return 1
+    fi
+
+    cd "$QWEN_TTS_DIR"
+
+    # 创建虚拟环境
+    if ! create_venv "$QWEN_TTS_VENV" "Qwen3-TTS"; then
+        return 1
+    fi
+
+    # 激活虚拟环境并安装依赖
+    source "$QWEN_TTS_VENV/bin/activate"
+
+    log_info "升级 pip..."
+    pip install --upgrade pip -q
+
+    # 检查 PyTorch 是否已安装
+    if ! python -c "import torch" 2>/dev/null; then
+        log_info "安装 PyTorch CPU 版本..."
+        pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+    else
+        log_info "PyTorch 已安装"
+    fi
+
+    # 安装其他依赖
+    if [ -f "backend/requirements.txt" ]; then
+        log_info "安装 Qwen3-TTS 依赖..."
+        pip install -r backend/requirements.txt -q
+    fi
+
+    log_info "Qwen3-TTS 环境设置完成"
+    echo ""
+}
+
+# 设置 IndexTTS 环境
+setup_indextts_env() {
+    log_step "设置 IndexTTS 环境..."
+    echo ""
+
+    if [ ! -d "$INDEXTTS_DIR" ]; then
+        log_error "IndexTTS 目录不存在: $INDEXTTS_DIR"
+        return 1
+    fi
+
+    cd "$INDEXTTS_DIR"
+
+    # 创建虚拟环境
+    if ! create_venv "$INDEXTTS_VENV" "IndexTTS"; then
+        return 1
+    fi
+
+    # 激活虚拟环境并安装依赖
+    source "$INDEXTTS_VENV/bin/activate"
+
+    log_info "升级 pip..."
+    pip install --upgrade pip -q
+
+    # 安装依赖
+    if [ -f "requirements.txt" ]; then
+        log_info "安装 IndexTTS 依赖..."
+        pip install -r requirements.txt -q
+    fi
+
+    log_info "IndexTTS 环境设置完成"
+    echo ""
+}
+
+# 下载 Qwen3-TTS 模型
+download_qwen_tts_model() {
+    log_step "检查 Qwen3-TTS 模型..."
+    echo ""
+
+    # Qwen3-TTS 模型通过 qwen-tts 库在首次使用时自动下载到 ~/.cache/huggingface/
+    # 这里只检查 qwen-tts 库是否安装
+
+    if [ ! -d "$QWEN_TTS_VENV" ]; then
+        log_warn "请先设置 Qwen3-TTS 环境"
+        return 1
+    fi
+
+    source "$QWEN_TTS_VENV/bin/activate"
+
+    if python -c "import qwen_tts" 2>/dev/null; then
+        log_info "qwen-tts 库已安装，模型将在首次使用时自动下载"
+    else
+        log_info "安装 qwen-tts 库..."
+        pip install qwen-tts
+        log_info "qwen-tts 库安装完成，模型将在首次使用时自动下载 (~1.5GB)"
+    fi
+
+    echo ""
+}
+
+# 下载 IndexTTS 模型
+download_indextts_model() {
+    log_step "检查 IndexTTS 模型..."
+    echo ""
+
+    if [ ! -d "$INDEXTTS_DIR" ]; then
+        log_error "IndexTTS 目录不存在: $INDEXTTS_DIR"
+        return 1
+    fi
+
+    cd "$INDEXTTS_DIR"
+
+    # 检查模型是否已存在
+    if [ -d "weights" ] && [ "$(ls -A weights 2>/dev/null)" ]; then
+        log_info "IndexTTS 模型已存在"
+        ls -lh weights/ 2>/dev/null | head -5
+        return 0
+    fi
+
+    log_info "IndexTTS 模型不存在，开始下载..."
+
+    # 确保虚拟环境存在
+    if [ ! -d "$INDEXTTS_VENV" ]; then
+        log_warn "请先设置 IndexTTS 环境"
+        return 1
+    fi
+
+    source "$INDEXTTS_VENV/bin/activate"
+
+    # 检查并安装 modelscope
+    if ! python -c "import modelscope" 2>/dev/null; then
+        log_info "安装 modelscope..."
+        pip install modelscope -i https://pypi.tuna.tsinghua.edu.cn/simple
+    fi
+
+    # 创建 weights 目录
+    mkdir -p weights
+
+    # 下载模型
+    log_info "开始下载 IndexTTS-2 模型 (约 3-5GB)，请耐心等待..."
+    modelscope download --model IndexTeam/IndexTTS-2 --local_dir weights/
+
+    if [ -d "weights" ] && [ "$(ls -A weights 2>/dev/null)" ]; then
+        log_info "IndexTTS 模型下载完成"
+        ls -lh weights/ | head -5
+    else
+        log_error "IndexTTS 模型下载失败"
+        return 1
+    fi
+
+    echo ""
+}
+
+# 单独启动 Qwen3-TTS（完整流程：环境设置 + 模型下载 + 启动）
+start_qwen_tts_standalone() {
+    print_header
+    log_step "启动 Qwen3-TTS 后端服务 (完整流程)..."
+    echo ""
+
+    # 1. 设置环境
+    setup_qwen_tts_env || return 1
+
+    # 2. 检查模型
+    download_qwen_tts_model || return 1
+
+    # 3. 启动服务
+    start_qwen_tts || return 1
+
+    echo ""
+    log_info "Qwen3-TTS 后端服务启动完成！"
+    log_info "服务地址: http://localhost:$QWEN_TTS_PORT"
+}
+
+# 单独启动 IndexTTS（完整流程：环境设置 + 模型下载 + 启动）
+start_indextts_standalone() {
+    print_header
+    log_step "启动 IndexTTS 后端服务 (完整流程)..."
+    echo ""
+
+    # 1. 设置环境
+    setup_indextts_env || return 1
+
+    # 2. 检查/下载模型
+    download_indextts_model || return 1
+
+    # 3. 启动服务
+    start_indextts || return 1
+
+    echo ""
+    log_info "IndexTTS 后端服务启动完成！"
+    log_info "服务地址: http://localhost:$INDEXTTS_PORT"
+}
+
+# 停止单个后端服务
+stop_qwen_tts() {
+    log_step "停止 Qwen3-TTS 服务..."
+    stop_port $QWEN_TTS_PORT "Qwen3-TTS"
+    rm -f "$PID_DIR/qwen3-tts.pid"
+}
+
+stop_indextts() {
+    log_step "停止 IndexTTS 服务..."
+    stop_port $INDEXTTS_PORT "IndexTTS"
+    rm -f "$PID_DIR/indextts.pid"
+}
+
+# ============================================
 # 开发模式
 # ============================================
 
@@ -773,7 +1011,7 @@ main_menu() {
         print_header
         print_menu
 
-        read -p "请选择操作 [0-13]: " choice
+        read -p "请选择操作 [0-17]: " choice
         echo ""
 
         case $choice in
@@ -833,6 +1071,26 @@ main_menu() {
                 install_deps
                 read -p "按回车键继续..."
                 ;;
+            14)
+                init_dirs
+                load_env
+                start_qwen_tts_standalone
+                read -p "按回车键继续..."
+                ;;
+            15)
+                init_dirs
+                load_env
+                start_indextts_standalone
+                read -p "按回车键继续..."
+                ;;
+            16)
+                stop_qwen_tts
+                read -p "按回车键继续..."
+                ;;
+            17)
+                stop_indextts
+                read -p "按回车键继续..."
+                ;;
             0)
                 echo -e "${GREEN}再见！${NC}"
                 exit 0
@@ -852,27 +1110,41 @@ main_menu() {
 show_help() {
     echo "TTS Gateway 管理脚本"
     echo ""
-    echo "用法: $0 [命令]"
+    echo "用法: $0 [命令|数字]"
     echo ""
-    echo "命令:"
-    echo "  start       一键启动所有服务"
-    echo "  stop        一键停止所有服务"
-    echo "  restart     重启所有服务"
-    echo "  status      查看服务状态"
-    echo "  frontend    启动前端"
-    echo "  backend     启动后端"
-    echo "  mock        启动后端 Mock 模式（无需模型）"
-    echo "  stop-fe     停止前端"
-    echo "  stop-be     停止后端"
-    echo "  logs        合并显示所有日志"
-    echo "  clean       清理构建缓存"
-    echo "  install     安装依赖"
+    echo "命令 (支持数字或名称):"
+    echo "  1  | start       一键启动所有服务"
+    echo "  2  | stop        一键停止所有服务"
+    echo "  3  | restart     重启所有服务"
+    echo "  4  | frontend    启动前端"
+    echo "  5  | backend     启动后端"
+    echo "  6  | mock        启动后端 Mock 模式（无需模型）"
+    echo "  7  | stop-fe     停止前端"
+    echo "  8  | stop-be     停止后端"
+    echo "  9  | status      查看服务状态"
+    echo "  10 | logs-menu   查看日志菜单"
+    echo "  11 | logs        合并显示所有日志"
+    echo "  12 | clean       清理构建缓存"
+    echo "  13 | install     安装依赖"
+    echo ""
+    echo "  单独启动后端服务 (自动创建虚拟环境+拉取模型):"
+    echo "  14 | qwen        启动 Qwen3-TTS 后端服务"
+    echo "  15 | indextts    启动 IndexTTS 后端服务"
+    echo "  16 | stop-qwen   停止 Qwen3-TTS 服务"
+    echo "  17 | stop-index  停止 IndexTTS 服务"
+    echo ""
+    echo "  其他命令:"
     echo "  dev-fe      前端开发模式"
     echo "  dev-gw      Gateway 开发模式"
     echo "  test        运行 API 测试"
     echo "  test-unit   运行单元测试"
     echo "  health      运行健康检查"
-    echo "  help        显示帮助"
+    echo "  0  | help   显示帮助"
+    echo ""
+    echo "示例:"
+    echo "  $0 14        # 启动 Qwen3-TTS (使用数字)"
+    echo "  $0 qwen      # 启动 Qwen3-TTS (使用名称)"
+    echo "  $0 15        # 启动 IndexTTS (使用数字)"
     echo ""
     echo "环境变量配置:"
     echo "  在项目根目录创建 .env 文件，配置 NEXT_PUBLIC_API_URL 等变量"
@@ -942,41 +1214,56 @@ else
     # 有参数，执行对应命令
     load_env
     case "$1" in
-        start)
+        1|start)
             start_all
             ;;
-        stop)
+        2|stop)
             stop_all
             ;;
-        restart)
+        3|restart)
             restart_all
             ;;
-        status)
-            show_status
-            ;;
-        frontend)
+        4|frontend)
             start_frontend
             ;;
-        backend)
+        5|backend)
             start_backend
             ;;
-        mock)
+        6|mock)
             start_backend_mock
             ;;
-        stop-fe)
+        7|stop-fe)
             stop_frontend
             ;;
-        stop-be)
+        8|stop-be)
             stop_backend
             ;;
-        logs)
+        9|status)
+            show_status
+            ;;
+        10|logs-menu)
+            show_logs_menu
+            ;;
+        11|logs)
             show_combined_logs
             ;;
-        clean)
+        12|clean)
             clean_cache
             ;;
-        install)
+        13|install)
             install_deps
+            ;;
+        14|qwen)
+            start_qwen_tts_standalone
+            ;;
+        15|indextts)
+            start_indextts_standalone
+            ;;
+        16|stop-qwen)
+            stop_qwen_tts
+            ;;
+        17|stop-index)
+            stop_indextts
             ;;
         dev-fe)
             dev_frontend
@@ -993,7 +1280,7 @@ else
         health)
             run_health_check
             ;;
-        help|--help|-h)
+        0|help|--help|-h)
             show_help
             ;;
         *)
