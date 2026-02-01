@@ -39,12 +39,12 @@ export default function VoiceSelector({ className = '' }: VoiceSelectorProps) {
   if (isLoading) {
     return (
       <div className={`space-y-3 ${className}`}>
-        <label className="text-sm font-medium text-slate-300">选择音色</label>
+        <label className="text-headline text-text-primary">选择音色</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-20 rounded-xl bg-cyber-bg-secondary/50 animate-pulse"
+              className="h-20 rounded-ios-md bg-fill-tertiary animate-pulse"
             />
           ))}
         </div>
@@ -55,8 +55,8 @@ export default function VoiceSelector({ className = '' }: VoiceSelectorProps) {
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-slate-300">选择音色</label>
-        <span className="text-xs text-slate-500">
+        <label className="text-headline text-text-primary">选择音色</label>
+        <span className="text-caption-1 text-text-tertiary">
           {filteredVoices.length} 个可用
         </span>
       </div>
@@ -77,45 +77,44 @@ export default function VoiceSelector({ className = '' }: VoiceSelectorProps) {
               return (
                 <motion.button
                   key={voice.id}
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setConfig({ voice: voice.id })}
                   className={`
-                    relative p-3 rounded-xl border transition-all duration-300 cursor-pointer text-left
+                    relative p-3 rounded-ios-md border transition-all duration-150 cursor-pointer text-left
                     ${
                       isSelected
-                        ? 'bg-gradient-to-br from-neon-cyan/10 to-neon-purple/5 border-neon-cyan/40'
-                        : 'bg-cyber-bg-secondary/30 border-white/5 hover:border-white/15'
+                        ? 'bg-ios-blue/10 border-ios-blue/30'
+                        : 'bg-fill-tertiary border-transparent hover:bg-fill-secondary'
                     }
                   `}
                 >
                   <div className="flex items-center gap-2">
                     <div
                       className={`
-                        w-8 h-8 rounded-lg flex items-center justify-center
-                        ${isSelected ? 'bg-neon-cyan/20' : 'bg-white/5'}
+                        w-8 h-8 rounded-ios-sm flex items-center justify-center
+                        ${isSelected ? 'bg-ios-blue' : 'bg-fill-secondary'}
                       `}
                     >
                       {voice.id === 'default' ? (
                         <Mic2
-                          className={`w-4 h-4 ${isSelected ? 'text-neon-cyan' : 'text-slate-400'}`}
+                          className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-text-tertiary'}`}
                         />
                       ) : (
                         <User
-                          className={`w-4 h-4 ${isSelected ? 'text-neon-cyan' : 'text-slate-400'}`}
+                          className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-text-tertiary'}`}
                         />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p
-                        className={`text-sm font-medium truncate ${
-                          isSelected ? 'text-white' : 'text-slate-300'
+                        className={`text-subheadline font-medium truncate ${
+                          isSelected ? 'text-text-primary' : 'text-text-secondary'
                         }`}
                       >
                         {voice.name}
                       </p>
                       {voice.emotions.length > 0 && (
-                        <p className="text-[10px] text-slate-500 truncate">
+                        <p className="text-caption-2 text-text-quaternary truncate">
                           {voice.emotions.slice(0, 3).join(' · ')}
                           {voice.emotions.length > 3 && ` +${voice.emotions.length - 3}`}
                         </p>
@@ -126,7 +125,7 @@ export default function VoiceSelector({ className = '' }: VoiceSelectorProps) {
                   {isSelected && (
                     <motion.div
                       layoutId="voiceSelector"
-                      className="absolute inset-0 rounded-xl border border-neon-cyan/30"
+                      className="absolute inset-0 rounded-ios-md border-2 border-ios-blue"
                       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                     />
                   )}
@@ -138,9 +137,9 @@ export default function VoiceSelector({ className = '' }: VoiceSelectorProps) {
       ))}
 
       {filteredVoices.length === 0 && (
-        <div className="text-center py-8 text-slate-500">
-          <User className="w-8 h-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">暂无可用音色</p>
+        <div className="ios-empty-state py-8">
+          <User className="ios-empty-icon" />
+          <p className="ios-empty-description">暂无可用音色</p>
         </div>
       )}
     </div>

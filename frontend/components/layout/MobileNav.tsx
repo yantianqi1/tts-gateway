@@ -21,9 +21,9 @@ export default function MobileNav({ className = '' }: MobileNavProps) {
 
   return (
     <nav
-      className={`fixed bottom-0 left-0 right-0 frosted-glass border-t border-white/20 z-50 ${className}`}
+      className={`fixed bottom-0 left-0 right-0 bg-material-thick backdrop-blur-ios border-t border-separator z-50 ${className}`}
     >
-      <div className="flex items-center justify-around h-16 px-2">
+      <div className="flex items-center justify-around h-[83px] px-2 pb-5">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -31,30 +31,18 @@ export default function MobileNav({ className = '' }: MobileNavProps) {
           return (
             <Link key={item.href} href={item.href} className="flex-1">
               <motion.div
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.92 }}
                 className={`
-                  flex flex-col items-center gap-1 py-2 px-3 rounded-glass-sm
-                  transition-all duration-300
+                  flex flex-col items-center gap-1 py-2 px-3
+                  transition-all duration-150
                   ${isActive
-                    ? 'text-dopamine-accent'
-                    : 'text-gray-400'
+                    ? 'text-ios-blue'
+                    : 'text-text-tertiary'
                   }
                 `}
               >
-                <div className="relative">
-                  <Icon className="w-5 h-5" />
-                  {isActive && (
-                    <>
-                      <div className="absolute inset-0 blur-md bg-dopamine-purple/30 rounded-full" />
-                      <motion.div
-                        layoutId="mobileActiveIndicator"
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-dopamine-purple"
-                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                      />
-                    </>
-                  )}
-                </div>
-                <span className={`text-[10px] font-medium ${isActive ? 'text-dopamine-accent' : ''}`}>
+                <Icon className="w-6 h-6" strokeWidth={isActive ? 2 : 1.5} />
+                <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>
                   {item.label}
                 </span>
               </motion.div>

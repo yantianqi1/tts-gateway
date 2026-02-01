@@ -54,19 +54,19 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
   const getColorClasses = (color: string, isSelected: boolean) => {
     const colors: Record<string, { bg: string; border: string; icon: string }> = {
       purple: {
-        bg: isSelected ? 'bg-dopamine-purple/15' : 'bg-white/50',
-        border: isSelected ? 'border-dopamine-purple/40' : 'border-white/30',
-        icon: 'bg-dopamine-purple',
+        bg: isSelected ? 'bg-ios-purple/12' : 'bg-fill-tertiary',
+        border: isSelected ? 'border-ios-purple/30' : 'border-transparent',
+        icon: 'bg-ios-purple',
       },
       pink: {
-        bg: isSelected ? 'bg-dopamine-pink/15' : 'bg-white/50',
-        border: isSelected ? 'border-dopamine-pink/40' : 'border-white/30',
-        icon: 'bg-dopamine-pink',
+        bg: isSelected ? 'bg-ios-pink/12' : 'bg-fill-tertiary',
+        border: isSelected ? 'border-ios-pink/30' : 'border-transparent',
+        icon: 'bg-ios-pink',
       },
       blue: {
-        bg: isSelected ? 'bg-dopamine-blue/15' : 'bg-white/50',
-        border: isSelected ? 'border-dopamine-blue/40' : 'border-white/30',
-        icon: 'bg-dopamine-blue',
+        bg: isSelected ? 'bg-ios-blue/12' : 'bg-fill-tertiary',
+        border: isSelected ? 'border-ios-blue/30' : 'border-transparent',
+        icon: 'bg-ios-blue',
       },
     };
     return colors[color] || colors.purple;
@@ -76,10 +76,10 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
     <div className={`space-y-4 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-headline text-text-primary">
           选择模型
         </label>
-        <span className="text-xs text-gray-400">
+        <span className="text-caption-1 text-text-tertiary">
           当前：{models.find(m => m.id === config.model)?.name}
         </span>
       </div>
@@ -95,13 +95,12 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
           return (
             <motion.button
               key={model.id}
-              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleModelChange(model.id)}
               className={`
-                relative p-4 rounded-glass-sm border backdrop-blur-sm transition-all duration-300 cursor-pointer
+                relative p-4 rounded-ios-md border transition-all duration-150 cursor-pointer
                 ${colorClasses.bg} ${colorClasses.border}
-                hover:shadow-glass
+                hover:shadow-ios-sm
               `}
             >
               {/* Status indicator */}
@@ -109,10 +108,10 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
                 <div
                   className={`w-2 h-2 rounded-full ${
                     status === 'online'
-                      ? 'bg-dopamine-success'
+                      ? 'bg-ios-green'
                       : status === 'offline'
-                        ? 'bg-dopamine-error'
-                        : 'bg-dopamine-warning'
+                        ? 'bg-ios-red'
+                        : 'bg-ios-orange'
                   }`}
                 />
               </div>
@@ -120,27 +119,27 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
               {/* Icon */}
               <div
                 className={`
-                  w-12 h-12 rounded-glass-sm flex items-center justify-center mb-3 mx-auto
-                  ${isSelected ? colorClasses.icon : 'bg-gray-200/50'}
-                  transition-all duration-300
+                  w-12 h-12 rounded-ios-sm flex items-center justify-center mb-3 mx-auto
+                  ${isSelected ? colorClasses.icon : 'bg-fill-secondary'}
+                  transition-all duration-150
                 `}
               >
                 <Icon
-                  className={`w-6 h-6 ${isSelected ? 'text-white' : 'text-gray-400'}`}
+                  className={`w-6 h-6 ${isSelected ? 'text-white' : 'text-text-tertiary'}`}
                 />
               </div>
 
               {/* Model name */}
               <h3
-                className={`text-sm font-semibold text-center ${
-                  isSelected ? 'text-gray-800' : 'text-gray-500'
+                className={`text-subheadline font-semibold text-center ${
+                  isSelected ? 'text-text-primary' : 'text-text-secondary'
                 }`}
               >
                 {model.name}
               </h3>
 
               {/* Description */}
-              <p className="text-[11px] text-gray-400 text-center mt-1">
+              <p className="text-caption-2 text-text-tertiary text-center mt-1">
                 {model.description}
               </p>
 
@@ -151,7 +150,7 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-dopamine"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-ios-blue"
                   />
                 )}
               </AnimatePresence>

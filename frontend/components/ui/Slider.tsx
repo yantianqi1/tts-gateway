@@ -34,12 +34,12 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         {(label || showValue) && (
           <div className="flex items-center justify-between">
             {label && (
-              <label htmlFor={id} className="text-sm font-medium text-gray-600">
+              <label htmlFor={id} className="text-subheadline text-text-primary">
                 {label}
               </label>
             )}
             {showValue && (
-              <span className="text-sm font-semibold text-dopamine-purple">
+              <span className="text-subheadline font-semibold text-ios-blue">
                 {valueFormatter(numericValue)}
               </span>
             )}
@@ -49,11 +49,11 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         {/* Slider track container */}
         <div className="relative h-8 flex items-center">
           {/* Background track */}
-          <div className="absolute inset-x-0 h-2 bg-gray-200/50 rounded-full" />
+          <div className="absolute inset-x-0 h-1 bg-ios-gray-5 rounded-full" />
 
-          {/* Filled track with gradient */}
+          {/* Filled track */}
           <div
-            className="absolute left-0 h-2 rounded-full bg-gradient-dopamine"
+            className="absolute left-0 h-1 rounded-full bg-ios-blue"
             style={{ width: `${percentage}%` }}
           />
 
@@ -66,13 +66,13 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             max={max}
             step={step}
             value={value}
-            className={`dopamine-slider relative z-10 ${className}`}
+            className={`ios-slider relative z-10 ${className}`}
             {...props}
           />
         </div>
 
         {hint && (
-          <p className="text-xs text-gray-400">
+          <p className="text-caption-1 text-text-tertiary">
             {hint}
           </p>
         )}

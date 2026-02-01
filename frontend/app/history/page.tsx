@@ -94,12 +94,12 @@ export default function HistoryPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-ocean rounded-glass-sm shadow-dopamine-mint">
+            <div className="p-2.5 bg-ios-teal rounded-ios-sm shadow-ios-md">
               <History className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold gradient-text">生成历史</h1>
-              <p className="text-sm text-gray-500">
+              <h1 className="text-title-2">生成历史</h1>
+              <p className="text-footnote text-text-secondary">
                 共 {history.length} 条记录
               </p>
             </div>
@@ -107,7 +107,7 @@ export default function HistoryPage() {
 
           {history.length > 0 && (
             <Button
-              variant="danger"
+              variant="destructive"
               size="sm"
               onClick={() => {
                 if (confirm('确定要清空所有历史记录吗？')) {
@@ -124,13 +124,13 @@ export default function HistoryPage() {
         {/* Search */}
         {history.length > 0 && (
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-placeholder" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜索历史记录..."
-              className="dopamine-input w-full pl-10"
+              className="ios-input w-full pl-10"
             />
           </div>
         )}
@@ -138,18 +138,18 @@ export default function HistoryPage() {
 
       {/* Content */}
       {history.length === 0 ? (
-        <Card variant="glass" padding="lg" className="text-center py-12">
-          <History className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">暂无历史记录</h3>
-          <p className="text-sm text-gray-500">
+        <Card variant="default" padding="lg" className="ios-empty-state">
+          <History className="ios-empty-icon" />
+          <h3 className="ios-empty-title">暂无历史记录</h3>
+          <p className="ios-empty-description">
             生成的语音将自动保存到这里
           </p>
         </Card>
       ) : filteredHistory.length === 0 ? (
-        <Card variant="glass" padding="lg" className="text-center py-12">
-          <Search className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">没有匹配的结果</h3>
-          <p className="text-sm text-gray-500">
+        <Card variant="default" padding="lg" className="ios-empty-state">
+          <Search className="ios-empty-icon" />
+          <h3 className="ios-empty-title">没有匹配的结果</h3>
+          <p className="ios-empty-description">
             尝试其他搜索关键词
           </p>
         </Card>
@@ -163,7 +163,7 @@ export default function HistoryPage() {
               exit={{ opacity: 0, y: -20 }}
               className="mb-6"
             >
-              <h2 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
+              <h2 className="text-footnote text-text-tertiary mb-3 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 {date}
               </h2>
@@ -176,17 +176,17 @@ export default function HistoryPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, x: -100 }}
-                    className="glass-card p-4"
+                    className="ios-card p-4"
                   >
                     <div className="flex items-start gap-4">
                       {/* Time */}
-                      <div className="text-xs text-gray-400 pt-1">
+                      <div className="text-caption-1 text-text-quaternary pt-1">
                         {formatTime(item.timestamp)}
                       </div>
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-700 line-clamp-2 mb-2">
+                        <p className="text-callout text-text-primary line-clamp-2 mb-2">
                           {item.text}
                         </p>
 
@@ -216,19 +216,17 @@ export default function HistoryPage() {
                         {item.audioUrl && (
                           <>
                             <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
+                              whileTap={{ scale: 0.92 }}
                               onClick={() => play(item.audioUrl!)}
-                              className="p-2 text-gray-400 hover:text-dopamine-purple hover:bg-dopamine-purple/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-2 text-text-tertiary hover:text-ios-blue hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
                               title="播放"
                             >
                               <Play className="w-4 h-4" />
                             </motion.button>
                             <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
+                              whileTap={{ scale: 0.92 }}
                               onClick={() => handleDownload(item.audioUrl!, item.text)}
-                              className="p-2 text-gray-400 hover:text-dopamine-mint hover:bg-dopamine-mint/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-2 text-text-tertiary hover:text-ios-green hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
                               title="下载"
                             >
                               <Download className="w-4 h-4" />
@@ -236,10 +234,9 @@ export default function HistoryPage() {
                           </>
                         )}
                         <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
+                          whileTap={{ scale: 0.92 }}
                           onClick={() => removeResult(item.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                          className="p-2 text-text-tertiary hover:text-ios-red hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
                           title="删除"
                         >
                           <Trash2 className="w-4 h-4" />

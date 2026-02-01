@@ -60,7 +60,7 @@ export default function Modal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={closeOnOverlayClick ? onClose : undefined}
           />
 
@@ -72,19 +72,18 @@ export default function Modal({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className={`
               relative w-full ${sizes[size]}
-              cyber-card p-6
+              ios-card p-6
               max-h-[90vh] overflow-y-auto
             `}
           >
             {/* Header */}
             {title && (
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-neon-cyan/10">
-                <h2 className="text-lg font-semibold gradient-text">{title}</h2>
+              <div className="flex items-center justify-between mb-4 pb-4 border-b border-separator">
+                <h2 className="text-title-3 text-text-primary">{title}</h2>
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ scale: 0.92 }}
                   onClick={onClose}
-                  className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 text-text-tertiary hover:text-text-primary hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </motion.button>
@@ -94,10 +93,9 @@ export default function Modal({
             {/* Close button if no title */}
             {!title && (
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.92 }}
                 onClick={onClose}
-                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                className="absolute top-4 right-4 p-2 text-text-tertiary hover:text-text-primary hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </motion.button>

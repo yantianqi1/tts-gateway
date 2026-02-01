@@ -4,20 +4,17 @@ import { forwardRef, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 interface CardProps {
-  variant?: 'default' | 'glass' | 'purple' | 'pink' | 'blue' | 'mint';
-  hover?: boolean;
+  variant?: 'default' | 'grouped' | 'inset' | 'interactive';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   className?: string;
   children?: ReactNode;
 }
 
 const variants: Record<string, string> = {
-  default: 'glass-card',
-  glass: 'glass-card',
-  purple: 'glass-card-purple backdrop-blur-sm border',
-  pink: 'glass-card-pink backdrop-blur-sm border',
-  blue: 'glass-card-blue backdrop-blur-sm border',
-  mint: 'glass-card-mint backdrop-blur-sm border',
+  default: 'ios-card',
+  grouped: 'ios-card-grouped',
+  inset: 'ios-card-inset',
+  interactive: 'ios-card-interactive',
 };
 
 const paddings: Record<string, string> = {
@@ -31,17 +28,35 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   (
     {
       variant = 'default',
-      hover = false,
       padding = 'md',
       className = '',
       children,
     },
     ref
   ) => {
+    const isInteractive = variant === 'interactive';
+
+    if (isInteractive) {
+      return (
+        <motion.div
+          ref={ref}
+          whileHover={{ scale: 1.01, y: -1 }}
+          whileTap={{ scale: 0.99 }}
+          transition={{ duration: 0.15 }}
+          className={`
+            ${variants[variant]}
+            ${paddings[padding]}
+            ${className}
+          `}
+        >
+          {children}
+        </motion.div>
+      );
+    }
+
     return (
-      <motion.div
+      <div
         ref={ref}
-        whileHover={hover ? { scale: 1.01, y: -2 } : undefined}
         className={`
           ${variants[variant]}
           ${paddings[padding]}
@@ -49,7 +64,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         `}
       >
         {children}
-      </motion.div>
+      </div>
     );
   }
 );

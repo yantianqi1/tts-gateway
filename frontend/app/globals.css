@@ -1,54 +1,73 @@
 @import "tailwindcss";
 
 /* ============================================
-   DOPAMINE LIGHT THEME
-   Pastel Multi-color Glassmorphism Design
+   iOS-INSPIRED DESIGN SYSTEM
+   Clean, Readable, Apple HIG Compliant
    ============================================ */
 
 :root {
-  /* Warm White Backgrounds */
-  --bg-primary: #FEFCFB;
-  --bg-secondary: #FBF9F8;
-  --bg-surface: #FFFFFF;
-  --bg-card: rgba(255, 255, 255, 0.7);
+  /* ===== Background Colors ===== */
+  --bg-primary: #F2F2F7;           /* iOS System Gray 6 - Main background */
+  --bg-secondary: #FFFFFF;          /* Pure white - Card background */
+  --bg-tertiary: #F9F9F9;           /* Subtle variation */
+  --bg-grouped: #F2F2F7;            /* Grouped table background */
 
-  /* Dopamine Pastels - Harmonious Multi-color */
-  --dopamine-purple: #A78BFA;
-  --dopamine-pink: #F9A8D4;
-  --dopamine-blue: #7DD3FC;
-  --dopamine-mint: #6EE7B7;
-  --dopamine-peach: #FDBA74;
-  --dopamine-coral: #FDA4AF;
-  --dopamine-lavender: #C4B5FD;
+  /* ===== Text Colors - High Contrast ===== */
+  --text-primary: #000000;          /* Pure black - Primary text */
+  --text-secondary: #3C3C43;        /* iOS Secondary label - 60% opacity equiv */
+  --text-tertiary: #48484A;         /* iOS Tertiary label */
+  --text-quaternary: #636366;       /* iOS Quaternary label */
+  --text-placeholder: #8E8E93;      /* Placeholder text */
 
-  /* Accent Colors */
-  --accent-primary: #8B5CF6;
-  --accent-secondary: #06B6D4;
-  --accent-success: #10B981;
-  --accent-warning: #F59E0B;
-  --accent-error: #EF4444;
+  /* ===== iOS System Colors ===== */
+  --ios-blue: #007AFF;              /* Primary action */
+  --ios-green: #34C759;             /* Success */
+  --ios-red: #FF3B30;               /* Error/Destructive */
+  --ios-orange: #FF9500;            /* Warning */
+  --ios-yellow: #FFCC00;            /* Caution */
+  --ios-teal: #5AC8FA;              /* Info */
+  --ios-purple: #AF52DE;            /* Accent */
+  --ios-pink: #FF2D55;              /* Accent alt */
+  --ios-indigo: #5856D6;            /* Brand accent */
 
-  /* Text Colors */
-  --text-primary: #1F2937;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
+  /* ===== Gray Scale (iOS System Grays) ===== */
+  --gray-1: #8E8E93;
+  --gray-2: #AEAEB2;
+  --gray-3: #C7C7CC;
+  --gray-4: #D1D1D6;
+  --gray-5: #E5E5EA;
+  --gray-6: #F2F2F7;
 
-  /* Gradients */
-  --gradient-dopamine: linear-gradient(135deg, #A78BFA 0%, #F9A8D4 50%, #7DD3FC 100%);
-  --gradient-candy: linear-gradient(135deg, #F9A8D4 0%, #FDBA74 100%);
-  --gradient-ocean: linear-gradient(135deg, #7DD3FC 0%, #6EE7B7 100%);
-  --gradient-aurora: linear-gradient(135deg, #C4B5FD 0%, #7DD3FC 50%, #6EE7B7 100%);
+  /* ===== Separator Colors ===== */
+  --separator: rgba(60, 60, 67, 0.12);
+  --separator-opaque: #C6C6C8;
 
-  /* Glass Morphism */
-  --glass-blur: 20px;
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-border-hover: rgba(255, 255, 255, 0.5);
+  /* ===== Fill Colors ===== */
+  --fill-primary: rgba(120, 120, 128, 0.2);
+  --fill-secondary: rgba(120, 120, 128, 0.16);
+  --fill-tertiary: rgba(118, 118, 128, 0.12);
 
-  /* Soft Radius */
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  /* ===== Materials (Blur effects) ===== */
+  --material-thin: rgba(255, 255, 255, 0.8);
+  --material-regular: rgba(255, 255, 255, 0.92);
+  --material-thick: rgba(255, 255, 255, 0.97);
+
+  /* ===== Corner Radius - iOS Standard ===== */
+  --radius-sm: 8px;                 /* Small elements */
+  --radius-md: 12px;                /* Cards, inputs */
+  --radius-lg: 16px;                /* Modals, large cards */
+  --radius-xl: 20px;                /* Extra large */
+  --radius-full: 9999px;            /* Pills, badges */
+
+  /* ===== Shadows - Subtle iOS style ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* ===== Animation Timing ===== */
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ============================================
@@ -57,296 +76,362 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-feature-settings: 'kern' 1, 'liga' 1;
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 /* ============================================
-   ANIMATED BACKGROUND BLOBS
+   TYPOGRAPHY - iOS Style
    ============================================ */
 
-.dopamine-bg {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
+.text-title-1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
 }
 
-.dopamine-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
-  animation: blob 7s infinite;
+.text-title-2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--text-primary);
 }
 
-.dopamine-blob-1 {
-  width: 400px;
-  height: 400px;
-  background: var(--dopamine-purple);
-  top: -100px;
-  left: -100px;
-  animation-delay: 0s;
-}
-
-.dopamine-blob-2 {
-  width: 350px;
-  height: 350px;
-  background: var(--dopamine-pink);
-  top: 50%;
-  right: -50px;
-  animation-delay: 2s;
-}
-
-.dopamine-blob-3 {
-  width: 300px;
-  height: 300px;
-  background: var(--dopamine-blue);
-  bottom: -50px;
-  left: 30%;
-  animation-delay: 4s;
-}
-
-.dopamine-blob-4 {
-  width: 250px;
-  height: 250px;
-  background: var(--dopamine-mint);
-  top: 30%;
-  left: 60%;
-  animation-delay: 1s;
-}
-
-@keyframes blob {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-
-/* ============================================
-   GLASS CARD - Liquid Glass Effect
-   ============================================ */
-
-.glass-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  box-shadow:
-    0 4px 30px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: var(--glass-border-hover);
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
-}
-
-/* Glass card variants */
-.glass-card-purple {
-  background: rgba(167, 139, 250, 0.15);
-  border-color: rgba(167, 139, 250, 0.3);
-}
-
-.glass-card-pink {
-  background: rgba(249, 168, 212, 0.15);
-  border-color: rgba(249, 168, 212, 0.3);
-}
-
-.glass-card-blue {
-  background: rgba(125, 211, 252, 0.15);
-  border-color: rgba(125, 211, 252, 0.3);
-}
-
-.glass-card-mint {
-  background: rgba(110, 231, 183, 0.15);
-  border-color: rgba(110, 231, 183, 0.3);
-}
-
-/* Frosted glass - stronger blur */
-.frosted-glass {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: var(--radius-lg);
-}
-
-/* ============================================
-   DOPAMINE BUTTON
-   ============================================ */
-
-.dopamine-button {
-  background: var(--gradient-dopamine);
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease infinite;
-  color: white;
+.text-title-3 {
+  font-size: 20px;
   font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.text-headline {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.text-body {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.text-callout {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.text-subheadline {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.text-footnote {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.text-caption-1 {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-tertiary);
+}
+
+.text-caption-2 {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--text-quaternary);
+}
+
+/* ============================================
+   iOS CARD STYLES
+   ============================================ */
+
+.ios-card {
+  background: var(--bg-secondary);
   border-radius: var(--radius-md);
-  border: none;
-  position: relative;
+  box-shadow: var(--shadow-card);
   overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* Shimmer effect */
-.dopamine-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  transform: translateX(-100%);
-  animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  50%, 100% { transform: translateX(100%); }
-}
-
-.dopamine-button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.35);
-}
-
-.dopamine-button:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Secondary button */
-.dopamine-button-secondary {
-  background: rgba(139, 92, 246, 0.1);
-  color: var(--accent-primary);
-  box-shadow: none;
-}
-
-.dopamine-button-secondary:hover {
-  background: rgba(139, 92, 246, 0.2);
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
-}
-
-/* ============================================
-   DOPAMINE INPUT
-   ============================================ */
-
-.dopamine-input {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  padding: 12px 16px;
-  font-size: 0.9375rem;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-.dopamine-input::placeholder {
-  color: var(--text-muted);
-}
-
-.dopamine-input:focus {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: var(--dopamine-purple);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
-}
-
-/* ============================================
-   DOPAMINE TEXTAREA
-   ============================================ */
-
-.dopamine-textarea {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+.ios-card-grouped {
+  background: var(--bg-secondary);
   border-radius: var(--radius-md);
-  color: var(--text-primary);
-  padding: 16px;
-  resize: vertical;
-  min-height: 120px;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  transition: all 0.3s ease;
-  outline: none;
+  margin: 0 16px;
 }
 
-.dopamine-textarea::placeholder {
-  color: var(--text-muted);
+.ios-card-inset {
+  background: transparent;
+  border-top: 1px solid var(--separator);
+  border-bottom: 1px solid var(--separator);
+  border-radius: 0;
 }
 
-.dopamine-textarea:focus {
-  background: rgba(255, 255, 255, 0.98);
-  border-color: var(--dopamine-purple);
-  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1);
+/* Card with hover effect */
+.ios-card-interactive {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  cursor: pointer;
+}
+
+.ios-card-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.ios-card-interactive:active {
+  transform: scale(0.98);
 }
 
 /* ============================================
-   DOPAMINE SLIDER
+   iOS NAVIGATION / SIDEBAR
    ============================================ */
 
-.dopamine-slider {
+.ios-sidebar {
+  background: var(--material-regular);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid var(--separator);
+}
+
+.ios-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.15s var(--ease-out);
+  cursor: pointer;
+}
+
+.ios-nav-item:hover {
+  background: var(--fill-tertiary);
+  color: var(--text-primary);
+}
+
+.ios-nav-item.active {
+  background: var(--ios-blue);
+  color: white;
+}
+
+.ios-nav-item.active:hover {
+  background: var(--ios-blue);
+  color: white;
+}
+
+/* ============================================
+   iOS BUTTON STYLES
+   ============================================ */
+
+.ios-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+  border: none;
+  outline: none;
+}
+
+.ios-button-primary {
+  background: var(--ios-blue);
+  color: white;
+}
+
+.ios-button-primary:hover {
+  background: #0066D6;
+}
+
+.ios-button-primary:active {
+  transform: scale(0.97);
+}
+
+.ios-button-secondary {
+  background: var(--fill-primary);
+  color: var(--ios-blue);
+}
+
+.ios-button-secondary:hover {
+  background: var(--fill-secondary);
+}
+
+.ios-button-tinted {
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--ios-blue);
+}
+
+.ios-button-tinted:hover {
+  background: rgba(0, 122, 255, 0.18);
+}
+
+.ios-button-plain {
+  background: transparent;
+  color: var(--ios-blue);
+  padding: 8px 12px;
+}
+
+.ios-button-plain:hover {
+  background: var(--fill-tertiary);
+}
+
+.ios-button-destructive {
+  background: var(--ios-red);
+  color: white;
+}
+
+.ios-button-destructive:hover {
+  background: #E6342B;
+}
+
+/* ============================================
+   iOS INPUT STYLES
+   ============================================ */
+
+.ios-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--separator-opaque);
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ios-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.ios-input:focus {
+  border-color: var(--ios-blue);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+.ios-input-group {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ios-input-group .ios-input {
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--separator);
+}
+
+.ios-input-group .ios-input:last-child {
+  border-bottom: none;
+}
+
+/* ============================================
+   iOS TEXTAREA
+   ============================================ */
+
+.ios-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--separator-opaque);
+  border-radius: var(--radius-md);
+  font-size: 17px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ios-textarea::placeholder {
+  color: var(--text-placeholder);
+}
+
+.ios-textarea:focus {
+  border-color: var(--ios-blue);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+/* ============================================
+   iOS SLIDER
+   ============================================ */
+
+.ios-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 8px;
-  background: linear-gradient(90deg, var(--dopamine-purple), var(--dopamine-pink), var(--dopamine-blue));
-  border-radius: 8px;
+  height: 4px;
+  background: var(--gray-4);
+  border-radius: 2px;
   outline: none;
   cursor: pointer;
-  opacity: 0.3;
 }
 
-.dopamine-slider::-webkit-slider-runnable-track {
-  height: 8px;
-  border-radius: 8px;
-}
-
-.dopamine-slider::-webkit-slider-thumb {
+.ios-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: white;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(139, 92, 246, 0.2);
-  border: 3px solid var(--accent-primary);
-  transition: all 0.2s ease;
-  margin-top: -8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  border: none;
+  transition: transform 0.15s var(--ease-spring);
 }
 
-.dopamine-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 6px rgba(139, 92, 246, 0.25);
+.ios-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.08);
 }
 
-.dopamine-slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+.ios-slider::-webkit-slider-thumb:active {
+  transform: scale(1.12);
+}
+
+.ios-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: white;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  border: 3px solid var(--accent-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  border: none;
 }
 
 /* ============================================
@@ -356,23 +441,200 @@ body {
 .status-online {
   width: 8px;
   height: 8px;
-  background: var(--accent-success);
+  background: var(--ios-green);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
-  animation: pulse-soft 2s ease-in-out infinite;
 }
 
 .status-offline {
   width: 8px;
   height: 8px;
-  background: var(--accent-error);
+  background: var(--ios-red);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
-@keyframes pulse-soft {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(0.95); }
+.status-warning {
+  width: 8px;
+  height: 8px;
+  background: var(--ios-orange);
+  border-radius: 50%;
+}
+
+/* ============================================
+   iOS BADGE
+   ============================================ */
+
+.ios-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ios-badge-blue {
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--ios-blue);
+}
+
+.ios-badge-green {
+  background: rgba(52, 199, 89, 0.12);
+  color: var(--ios-green);
+}
+
+.ios-badge-red {
+  background: rgba(255, 59, 48, 0.12);
+  color: var(--ios-red);
+}
+
+.ios-badge-orange {
+  background: rgba(255, 149, 0, 0.12);
+  color: var(--ios-orange);
+}
+
+.ios-badge-purple {
+  background: rgba(175, 82, 222, 0.12);
+  color: var(--ios-purple);
+}
+
+.ios-badge-gray {
+  background: var(--fill-tertiary);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   iOS SEGMENTED CONTROL
+   ============================================ */
+
+.ios-segmented {
+  display: inline-flex;
+  background: var(--fill-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.ios-segmented-item {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+}
+
+.ios-segmented-item.active {
+  background: var(--bg-secondary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   iOS TOGGLE / SWITCH
+   ============================================ */
+
+.ios-toggle {
+  position: relative;
+  width: 51px;
+  height: 31px;
+  background: var(--fill-primary);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ios-toggle.active {
+  background: var(--ios-green);
+}
+
+.ios-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s var(--ease-spring);
+}
+
+.ios-toggle.active::after {
+  transform: translateX(20px);
+}
+
+/* ============================================
+   iOS LIST STYLES
+   ============================================ */
+
+.ios-list {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ios-list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--separator);
+  transition: background 0.1s ease;
+}
+
+.ios-list-item:last-child {
+  border-bottom: none;
+}
+
+.ios-list-item:active {
+  background: var(--fill-tertiary);
+}
+
+.ios-list-header {
+  padding: 8px 16px 6px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================
+   iOS PROGRESS BAR
+   ============================================ */
+
+.ios-progress {
+  height: 4px;
+  background: var(--gray-5);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ios-progress-bar {
+  height: 100%;
+  background: var(--ios-blue);
+  border-radius: 2px;
+  transition: width 0.3s var(--ease-out);
+}
+
+.ios-progress-bar-green {
+  background: var(--ios-green);
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+
+.ios-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid var(--gray-4);
+  border-top-color: var(--ios-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ============================================
@@ -385,177 +647,225 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.03);
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--dopamine-purple), var(--dopamine-pink));
+  background: var(--gray-3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--dopamine-purple), var(--dopamine-coral));
+  background: var(--gray-2);
 }
 
 /* ============================================
-   BADGE STYLES
+   ANIMATION UTILITIES
    ============================================ */
 
-.dopamine-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: rgba(139, 92, 246, 0.1);
-  color: var(--accent-primary);
+.animate-fade-in {
+  animation: fadeIn 0.3s var(--ease-out);
 }
 
-.dopamine-badge-pink {
-  background: rgba(249, 168, 212, 0.2);
-  color: #DB2777;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.dopamine-badge-blue {
-  background: rgba(125, 211, 252, 0.2);
-  color: #0891B2;
+.animate-slide-up {
+  animation: slideUp 0.35s var(--ease-out);
 }
 
-.dopamine-badge-mint {
-  background: rgba(110, 231, 183, 0.2);
-  color: #059669;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.dopamine-badge-peach {
-  background: rgba(253, 186, 116, 0.2);
-  color: #D97706;
+.animate-scale-in {
+  animation: scaleIn 0.25s var(--ease-spring);
 }
 
-/* ============================================
-   LOADING SPINNER
-   ============================================ */
-
-.dopamine-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(167, 139, 250, 0.2);
-  border-top-color: var(--dopamine-purple);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ============================================
-   GRADIENT TEXT
-   ============================================ */
-
-.gradient-text {
-  background: var(--gradient-dopamine);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-text-candy {
-  background: var(--gradient-candy);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-text-ocean {
-  background: var(--gradient-ocean);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ============================================
    UTILITY CLASSES
    ============================================ */
 
-.backdrop-blur-glass {
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+.backdrop-blur-ios {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* ============================================
-   WAVEFORM DECORATION
-   ============================================ */
-
-.waveform-bg {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath d='M0 10 Q5 5 10 10 T20 10 T30 10 T40 10 T50 10 T60 10 T70 10 T80 10 T90 10 T100 10' fill='none' stroke='rgba(167,139,250,0.2)' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 100px 20px;
-  background-repeat: repeat-x;
-  background-position: center;
-}
-
-/* ============================================
-   SIDEBAR NAV ITEM
-   ============================================ */
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
+.text-link {
+  color: var(--ios-blue);
   cursor: pointer;
 }
 
-.nav-item:hover {
-  background: rgba(139, 92, 246, 0.08);
-  color: var(--accent-primary);
+.text-link:hover {
+  text-decoration: underline;
 }
 
-.nav-item.active {
-  background: rgba(139, 92, 246, 0.12);
-  color: var(--accent-primary);
-  font-weight: 500;
+/* Selection color */
+::selection {
+  background: rgba(0, 122, 255, 0.2);
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--ios-blue);
+  outline-offset: 2px;
 }
 
 /* ============================================
-   CARD HOVER LIFT
+   EMPTY STATE
    ============================================ */
 
-.hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.ios-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
 }
 
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+.ios-empty-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--gray-2);
+  margin-bottom: 16px;
+}
+
+.ios-empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.ios-empty-description {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 280px;
 }
 
 /* ============================================
    AUDIO PLAYER STYLES
    ============================================ */
 
-.audio-player-track {
-  height: 8px;
-  background: linear-gradient(90deg, var(--dopamine-purple), var(--dopamine-pink), var(--dopamine-blue));
-  border-radius: 8px;
-  opacity: 0.2;
+.audio-track {
+  height: 4px;
+  background: var(--gray-5);
+  border-radius: 2px;
 }
 
-.audio-player-progress {
-  height: 8px;
-  background: linear-gradient(90deg, var(--dopamine-purple), var(--dopamine-pink));
-  border-radius: 8px;
+.audio-progress {
+  height: 4px;
+  background: var(--ios-blue);
+  border-radius: 2px;
+}
+
+/* ============================================
+   LEGACY CLASS MAPPINGS (for compatibility)
+   ============================================ */
+
+/* Map old classes to new iOS styles */
+.glass-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.frosted-glass {
+  background: var(--material-regular);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.gradient-text {
+  color: var(--ios-blue);
+}
+
+.dopamine-button {
+  background: var(--ios-blue);
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+}
+
+.dopamine-button:hover {
+  background: #0066D6;
+}
+
+.dopamine-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--separator-opaque);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  font-size: 17px;
+  outline: none;
+}
+
+.dopamine-input:focus {
+  border-color: var(--ios-blue);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+.dopamine-textarea {
+  background: var(--bg-secondary);
+  border: 1px solid var(--separator-opaque);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: 14px 16px;
+  font-size: 17px;
+  line-height: 1.5;
+  outline: none;
+}
+
+.dopamine-textarea:focus {
+  border-color: var(--ios-blue);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.15s var(--ease-out);
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--fill-tertiary);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--ios-blue);
+  font-weight: 600;
 }

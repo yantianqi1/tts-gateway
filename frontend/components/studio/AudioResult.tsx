@@ -27,14 +27,12 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
 
   if (sessionResults.length === 0) {
     return (
-      <div className={`flex flex-col items-center justify-center py-16 ${className}`}>
-        <div className="w-16 h-16 rounded-glass-sm bg-gradient-dopamine/20 flex items-center justify-center mb-4">
-          <Volume2 className="w-8 h-8 text-dopamine-purple/50" />
+      <div className={`ios-empty-state py-16 ${className}`}>
+        <div className="w-16 h-16 rounded-ios-md bg-ios-blue/10 flex items-center justify-center mb-4">
+          <Volume2 className="w-8 h-8 text-ios-blue/50" />
         </div>
-        <p className="text-gray-500 text-center text-sm font-medium">
-          暂无输出
-        </p>
-        <p className="text-xs text-gray-400 mt-2">
+        <p className="ios-empty-title">暂无输出</p>
+        <p className="ios-empty-description">
           生成的语音将显示在这里
         </p>
       </div>
@@ -45,8 +43,8 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
     <div className={`space-y-4 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-700">输出结果</h3>
-        <span className="text-xs text-gray-400">
+        <h3 className="text-headline text-text-primary">输出结果</h3>
+        <span className="text-caption-1 text-text-tertiary">
           {sessionResults.length} 条记录
         </span>
       </div>
@@ -59,28 +57,26 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, x: -100, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="p-4 glass-card rounded-glass-sm space-y-3"
+            className="p-4 ios-card rounded-ios-md space-y-3"
           >
             {/* Header */}
             <div className="flex items-start justify-between gap-3">
-              <p className="text-sm text-gray-700 line-clamp-2 flex-1">
+              <p className="text-callout text-text-primary line-clamp-2 flex-1">
                 "{result.text}"
               </p>
               <div className="flex items-center gap-1">
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ scale: 0.92 }}
                   onClick={() => handleDownload(result.audioUrl, result.text)}
-                  className="p-2 text-gray-400 hover:text-dopamine-purple hover:bg-dopamine-purple/10 rounded-lg transition-colors cursor-pointer"
+                  className="p-2 text-text-tertiary hover:text-ios-blue hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
                   title="下载"
                 >
                   <Download className="w-4 h-4" />
                 </motion.button>
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ scale: 0.92 }}
                   onClick={() => removeResult(result.id)}
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                  className="p-2 text-text-tertiary hover:text-ios-red hover:bg-fill-tertiary rounded-ios-sm transition-colors cursor-pointer"
                   title="删除"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -121,7 +117,7 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
             </div>
 
             {/* Footer */}
-            <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-[10px] text-gray-400">
+            <div className="pt-2 border-t border-separator flex items-center justify-between text-caption-2 text-text-quaternary">
               <span>ID: {result.id.slice(0, 8)}</span>
               <span>{new Date(result.timestamp).toLocaleTimeString()}</span>
             </div>

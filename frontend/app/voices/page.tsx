@@ -72,12 +72,12 @@ export default function VoicesPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-dopamine rounded-glass-sm shadow-dopamine">
+            <div className="p-2.5 bg-ios-blue rounded-ios-sm shadow-ios-md">
               <Users className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold gradient-text">音色管理</h1>
-              <p className="text-sm text-gray-500">
+              <h1 className="text-title-2">音色管理</h1>
+              <p className="text-footnote text-text-secondary">
                 管理 {voices?.length || 0} 个音色
               </p>
             </div>
@@ -85,7 +85,7 @@ export default function VoicesPage() {
 
           <div className="flex items-center gap-2">
             <Button
-              variant="ghost"
+              variant="tinted"
               size="sm"
               onClick={() => refetch()}
               leftIcon={<RefreshCw className="w-4 h-4" />}
@@ -106,20 +106,15 @@ export default function VoicesPage() {
         {/* Tabs and Search */}
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Tabs */}
-          <div className="flex items-center gap-1 p-1 glass-card rounded-glass-sm">
+          <div className="ios-segmented">
             {TABS.map((tab) => (
               <motion.button
                 key={tab.id}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setVoicesTab(tab.id)}
-                className={`
-                  px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer
-                  ${
-                    voicesTab === tab.id
-                      ? 'bg-gradient-dopamine text-white shadow-dopamine'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-white/50'
-                  }
-                `}
+                className={`ios-segmented-item cursor-pointer ${
+                  voicesTab === tab.id ? 'active' : ''
+                }`}
               >
                 {tab.label}
               </motion.button>
@@ -128,13 +123,13 @@ export default function VoicesPage() {
 
           {/* Search */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-placeholder" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜索音色..."
-              className="dopamine-input w-full pl-10"
+              className="ios-input w-full pl-10"
             />
           </div>
         </div>
@@ -146,15 +141,15 @@ export default function VoicesPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="h-40 rounded-glass glass-card animate-pulse"
+              className="h-40 rounded-ios-md bg-fill-tertiary animate-pulse"
             />
           ))}
         </div>
       ) : filteredVoices.length === 0 ? (
-        <Card variant="glass" padding="lg" className="text-center py-12">
-          <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">暂无音色</h3>
-          <p className="text-sm text-gray-500 mb-4">
+        <Card variant="default" padding="lg" className="ios-empty-state">
+          <Users className="ios-empty-icon" />
+          <h3 className="ios-empty-title">暂无音色</h3>
+          <p className="ios-empty-description">
             {searchQuery ? '没有匹配的搜索结果' : '上传您的第一个音色开始使用'}
           </p>
           {!searchQuery && (
@@ -162,6 +157,7 @@ export default function VoicesPage() {
               variant="primary"
               onClick={() => openModal('voiceUpload')}
               leftIcon={<Plus className="w-4 h-4" />}
+              className="mt-4"
             >
               上传音色
             </Button>
@@ -178,14 +174,14 @@ export default function VoicesPage() {
               className="mb-8"
             >
               {voicesTab === 'all' && (
-                <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                <h2 className="text-headline text-text-primary mb-4 flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
-                      backend === 'qwen3-tts' ? 'bg-dopamine-purple' : 'bg-dopamine-pink'
+                      backend === 'qwen3-tts' ? 'bg-ios-purple' : 'bg-ios-pink'
                     }`}
                   />
                   {backend}
-                  <span className="text-sm text-gray-400 font-normal">
+                  <span className="text-footnote text-text-tertiary font-normal">
                     ({backendVoices.length})
                   </span>
                 </h2>

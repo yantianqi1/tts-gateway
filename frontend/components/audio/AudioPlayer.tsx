@@ -109,15 +109,14 @@ export default function AudioPlayer({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`flex items-center gap-3 p-3 bg-white/50 rounded-glass-sm border border-white/30 ${className}`}>
+    <div className={`flex items-center gap-3 p-3 bg-fill-tertiary rounded-ios-md ${className}`}>
       <audio ref={audioRef} src={src} preload="metadata" />
 
       {/* Play/Pause button */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={togglePlay}
-        className="w-10 h-10 rounded-full bg-gradient-dopamine flex items-center justify-center cursor-pointer shadow-dopamine"
+        className="w-10 h-10 rounded-full bg-ios-blue flex items-center justify-center cursor-pointer shadow-ios-md"
       >
         {isPlaying ? (
           <Pause className="w-4 h-4 text-white" />
@@ -131,17 +130,17 @@ export default function AudioPlayer({
         <div
           ref={progressRef}
           onClick={handleProgressClick}
-          className="h-2 bg-gray-200/50 rounded-full cursor-pointer overflow-hidden relative"
+          className="h-1 bg-ios-gray-4 rounded-full cursor-pointer overflow-hidden relative"
         >
           {/* Played progress */}
           <motion.div
-            className="absolute inset-y-0 left-0 bg-gradient-dopamine rounded-full"
+            className="absolute inset-y-0 left-0 bg-ios-blue rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
 
         {/* Time display */}
-        <div className="flex justify-between text-[10px] text-gray-400">
+        <div className="flex justify-between text-caption-2 text-text-quaternary">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -149,10 +148,9 @@ export default function AudioPlayer({
 
       {/* Mute button */}
       <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileTap={{ scale: 0.92 }}
         onClick={toggleMute}
-        className="p-2 text-gray-400 hover:text-dopamine-purple transition-colors cursor-pointer"
+        className="p-2 text-text-tertiary hover:text-ios-blue transition-colors cursor-pointer"
       >
         {isMuted ? (
           <VolumeX className="w-4 h-4" />

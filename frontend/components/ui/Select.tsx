@@ -21,7 +21,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label className="block text-sm font-medium text-slate-300">
+          <label className="block text-subheadline text-text-primary">
             {label}
           </label>
         )}
@@ -29,8 +29,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           <select
             ref={ref}
             className={`
-              w-full cyber-input appearance-none pr-10
-              ${error ? 'border-red-500 focus:border-red-500' : ''}
+              w-full ios-input appearance-none pr-10 cursor-pointer
+              ${error ? 'border-ios-red focus:border-ios-red' : ''}
               ${className}
             `}
             {...props}
@@ -40,16 +40,16 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 key={option.value}
                 value={option.value}
                 disabled={option.disabled}
-                className="bg-cyber-bg-secondary text-white"
+                className="bg-white text-text-primary"
               >
                 {option.label}
               </option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
         </div>
-        {error && <p className="text-xs text-red-400">{error}</p>}
-        {hint && !error && <p className="text-xs text-slate-500">{hint}</p>}
+        {error && <p className="text-caption-1 text-ios-red">{error}</p>}
+        {hint && !error && <p className="text-caption-1 text-text-tertiary">{hint}</p>}
       </div>
     );
   }

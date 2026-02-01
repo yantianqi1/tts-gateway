@@ -19,19 +19,18 @@ export default function GenerateButton({ className = '' }: GenerateButtonProps) 
 
   return (
     <motion.button
-      whileHover={{ scale: isDisabled ? 1 : 1.02 }}
       whileTap={{ scale: isDisabled ? 1 : 0.98 }}
       onClick={() => generate()}
       disabled={isDisabled}
       className={`
-        relative w-full py-4 px-8 rounded-glass
-        font-semibold text-base
-        transition-all duration-300
+        relative w-full py-4 px-8 rounded-ios-md
+        font-semibold text-[17px]
+        transition-all duration-150
         overflow-hidden
         ${
           isDisabled
-            ? 'bg-gray-200/50 text-gray-400 cursor-not-allowed'
-            : 'dopamine-button text-white cursor-pointer'
+            ? 'bg-fill-secondary text-text-placeholder cursor-not-allowed'
+            : 'ios-button-primary cursor-pointer'
         }
         ${className}
       `}

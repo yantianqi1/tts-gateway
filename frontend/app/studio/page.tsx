@@ -25,12 +25,12 @@ export default function StudioPage() {
         className="mb-6"
       >
         <div className="flex items-center gap-4 mb-2">
-          <div className="p-2.5 bg-gradient-dopamine rounded-glass-sm shadow-dopamine">
+          <div className="p-2.5 bg-ios-blue rounded-ios-sm shadow-ios-md">
             <Mic2 className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold gradient-text tracking-tight">语音工作室</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h1 className="text-title-2">语音工作室</h1>
+            <p className="text-footnote text-text-secondary mt-0.5">
               高质量 AI 语音合成
             </p>
           </div>
@@ -47,17 +47,17 @@ export default function StudioPage() {
           className="lg:col-span-3 space-y-5"
         >
           {/* Text Input */}
-          <Card variant="glass" padding="lg">
+          <Card variant="default" padding="lg">
             <TextInput />
           </Card>
 
           {/* Model Selection */}
-          <Card variant="glass" padding="lg">
+          <Card variant="default" padding="lg">
             <ModelSelector />
           </Card>
 
           {/* Voice Selection */}
-          <Card variant="glass" padding="lg">
+          <Card variant="default" padding="lg">
             <VoiceSelector />
           </Card>
 
@@ -69,7 +69,7 @@ export default function StudioPage() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Card variant={config.model === 'qwen3-tts' ? 'glass' : 'pink'} padding="lg">
+              <Card variant="default" padding="lg">
                 {config.model === 'qwen3-tts' ? (
                   <QwenSettings />
                 ) : (
@@ -80,10 +80,10 @@ export default function StudioPage() {
           )}
 
           {/* Speed Control */}
-          <Card variant="glass" padding="lg">
+          <Card variant="default" padding="lg">
             <div className="flex items-center gap-2 mb-4">
-              <Gauge className="w-4 h-4 text-dopamine-purple" />
-              <span className="text-sm font-medium text-gray-700">
+              <Gauge className="w-4 h-4 text-ios-blue" />
+              <span className="text-headline text-text-primary">
                 语速控制
               </span>
             </div>
@@ -109,7 +109,7 @@ export default function StudioPage() {
           transition={{ delay: 0.2 }}
           className="lg:col-span-2"
         >
-          <Card variant="glass" padding="lg" className="sticky top-6">
+          <Card variant="default" padding="lg" className="sticky top-6">
             <AudioResult />
           </Card>
         </motion.div>
