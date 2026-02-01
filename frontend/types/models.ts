@@ -65,6 +65,7 @@ export interface AudioResult {
   audioBlob?: Blob;
   model: ModelType;
   voice: string;
+  emotion?: string;
   duration?: number;
   timestamp: number;
 }
