@@ -1,14 +1,21 @@
 """适配器工厂"""
 
 import logging
+import os
 from typing import Dict, Optional
 
 from gateway.config import settings
 from .base import TTSAdapter
 from .qwen_adapter import QwenTTSAdapter
 from .indextts_adapter import IndexTTSAdapter
+from .mock_adapter import mock_qwen_adapter, mock_indextts_adapter
 
 logger = logging.getLogger(__name__)
+
+
+def is_mock_mode() -> bool:
+    """检查是否为 Mock 模式"""
+    return os.environ.get("TTS_GATEWAY_MOCK_MODE", "").lower() in ("true", "1", "yes")
 
 
 class AdapterFactory:
@@ -23,21 +30,37 @@ class AdapterFactory:
         if cls._initialized:
             return
 
-        # 初始化 Qwen3-TTS 适配器
-        if settings.qwen3_tts_enabled:
-            cls._adapters["qwen3-tts"] = QwenTTSAdapter(
-                base_url=settings.qwen3_tts_url,
-                timeout=settings.qwen3_tts_timeout,
-            )
-            logger.info(f"Registered adapter: qwen3-tts ({settings.qwen3_tts_url})")
+        mock_mode = is_mock_mode()
 
-        # 初始化 IndexTTS 适配器
-        if settings.indextts_enabled:
-            cls._adapters["indextts-2.0"] = IndexTTSAdapter(
-                base_url=settings.indextts_url,
-                timeout=settings.indextts_timeout,
-            )
-            logger.info(f"Registered adapter: indextts-2.0 ({settings.indextts_url})")
+        if mock_mode:
+            logger.info("=" * 50)
+            logger.info("MOCK MODE ENABLED - 使用模拟适配器")
+            logger.info("=" * 50)
+
+            # 使用 Mock 适配器
+            cls._adapters["qwen3-tts"] = mock_qwen_adapter
+            logger.info("Registered mock adapter: qwen3-tts")
+
+            cls._adapters["indextts-2.0"] = mock_indextts_adapter
+            logger.info("Registered mock adapter: indextts-2.0")
+
+        else:
+            # 初始化真实适配器
+            # 初始化 Qwen3-TTS 适配器
+            if settings.qwen3_tts_enabled:
+                cls._adapters["qwen3-tts"] = QwenTTSAdapter(
+                    base_url=settings.qwen3_tts_url,
+                    timeout=settings.qwen3_tts_timeout,
+                )
+                logger.info(f"Registered adapter: qwen3-tts ({settings.qwen3_tts_url})")
+
+            # 初始化 IndexTTS 适配器
+            if settings.indextts_enabled:
+                cls._adapters["indextts-2.0"] = IndexTTSAdapter(
+                    base_url=settings.indextts_url,
+                    timeout=settings.indextts_timeout,
+                )
+                logger.info(f"Registered adapter: indextts-2.0 ({settings.indextts_url})")
 
         cls._initialized = True
 
