@@ -212,8 +212,7 @@ start_frontend() {
     echo $! > "$PID_DIR/frontend.pid"
 
     # 等待启动
-    sleep 3
-    if check_port $FRONTEND_PORT; then
+    if wait_for_port $FRONTEND_PORT "前端" 15; then
         log_info "前端启动成功: http://localhost:$FRONTEND_PORT"
     else
         log_error "前端启动失败，请检查日志: $LOG_DIR/frontend.log"
