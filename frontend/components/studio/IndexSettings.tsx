@@ -16,11 +16,14 @@ export default function IndexSettings({ className = '' }: IndexSettingsProps) {
 
   return (
     <div className={`space-y-4 ${className}`}>
-      <div className="flex items-center gap-2 pb-2 border-b border-neon-magenta/10">
-        <div className="p-1.5 bg-gradient-to-br from-neon-magenta/20 to-neon-purple/10 rounded-lg">
-          <Sparkles className="w-4 h-4 text-neon-magenta" />
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 bg-ios-pink/12 rounded-ios-sm">
+          <Sparkles className="w-4 h-4 text-ios-pink" />
         </div>
-        <span className="text-sm font-medium text-slate-300">IndexTTS 2.0 设置</span>
+        <span className="text-subheadline font-medium text-text-primary">
+          IndexTTS 2.0 设置
+        </span>
       </div>
 
       <Select

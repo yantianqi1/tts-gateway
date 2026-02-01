@@ -14,11 +14,14 @@ export default function QwenSettings({ className = '' }: QwenSettingsProps) {
 
   return (
     <div className={`space-y-4 ${className}`}>
-      <div className="flex items-center gap-2 pb-2 border-b border-neon-cyan/10">
-        <div className="p-1.5 bg-gradient-to-br from-neon-cyan/20 to-neon-purple/10 rounded-lg">
-          <Globe className="w-4 h-4 text-neon-cyan" />
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 bg-ios-purple/12 rounded-ios-sm">
+          <Globe className="w-4 h-4 text-ios-purple" />
         </div>
-        <span className="text-sm font-medium text-slate-300">Qwen3-TTS 设置</span>
+        <span className="text-subheadline font-medium text-text-primary">
+          Qwen3-TTS 设置
+        </span>
       </div>
 
       <Select
@@ -32,19 +35,19 @@ export default function QwenSettings({ className = '' }: QwenSettingsProps) {
       />
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-300 flex items-center gap-2">
-          <Music className="w-4 h-4 text-slate-400" />
+        <label className="text-subheadline text-text-secondary flex items-center gap-2">
+          <Music className="w-4 h-4 text-text-tertiary" />
           参考音频
         </label>
-        <div className="cyber-input flex items-center justify-center py-6 border-dashed cursor-pointer hover:border-neon-cyan/40 transition-colors">
+        <div className="ios-card p-6 flex items-center justify-center border-2 border-dashed border-separator-opaque cursor-pointer hover:border-ios-purple/40 transition-colors">
           <div className="text-center">
-            <Music className="w-6 h-6 mx-auto mb-2 text-slate-500" />
-            <p className="text-xs text-slate-500">
+            <Music className="w-6 h-6 mx-auto mb-2 text-text-quaternary" />
+            <p className="text-caption-1 text-text-tertiary">
               {config.refAudioId ? config.refAudioId : '选择参考音频进行声音克隆'}
             </p>
           </div>
         </div>
-        <p className="text-xs text-slate-500">
+        <p className="text-caption-2 text-text-quaternary">
           上传参考音频可进行声音克隆，支持 .wav 格式
         </p>
       </div>

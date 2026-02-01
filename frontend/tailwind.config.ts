@@ -8,14 +8,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Background Colors (for bg-bg-* utilities)
+        bg: {
+          primary: '#F2F2F7',
+          secondary: '#FFFFFF',
+          tertiary: '#F9F9F9',
+          grouped: '#F2F2F7',
+        },
+
         // iOS System Colors
         ios: {
-          // Primary Backgrounds
-          'bg-primary': '#F2F2F7',
-          'bg-secondary': '#FFFFFF',
-          'bg-tertiary': '#F9F9F9',
-          'bg-grouped': '#F2F2F7',
-
           // System Colors
           blue: '#007AFF',
           green: '#34C759',
@@ -34,6 +36,16 @@ export default {
           'gray-4': '#D1D1D6',
           'gray-5': '#E5E5EA',
           'gray-6': '#F2F2F7',
+        },
+
+        // Gray colors (for bg-gray-* utilities)
+        gray: {
+          1: '#8E8E93',
+          2: '#AEAEB2',
+          3: '#C7C7CC',
+          4: '#D1D1D6',
+          5: '#E5E5EA',
+          6: '#F2F2F7',
         },
 
         // Text Colors - High Contrast

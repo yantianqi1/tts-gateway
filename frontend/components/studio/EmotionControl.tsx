@@ -37,40 +37,43 @@ const ICON_MAP: Record<string, typeof Smile> = {
 };
 
 const MODE_OPTIONS = [
-  { value: 'preset', label: 'Preset', icon: Music, description: 'Emotion presets' },
-  { value: 'audio', label: 'Audio Ref', icon: FileAudio, description: 'Reference audio' },
-  { value: 'vector', label: 'Vector', icon: Sliders, description: '8D control' },
-  { value: 'text', label: 'Analysis', icon: MessageSquare, description: 'Auto detect' },
+  { value: 'preset', label: '预设', icon: Music },
+  { value: 'audio', label: '音频', icon: FileAudio },
+  { value: 'vector', label: '向量', icon: Sliders },
+  { value: 'text', label: '分析', icon: MessageSquare },
 ] as const;
 
-// Knob Component for emotion control
-function EmotionKnob({
+// iOS-style Circular Slider Component
+function CircularSlider({
   value,
   onChange,
   label,
   icon: Icon,
-  color,
 }: {
   value: number;
   onChange: (value: number) => void;
   label: string;
   icon: typeof Smile;
-  color: string;
 }) {
-  const knobRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  const handleInteraction = useCallback((clientY: number) => {
+    if (!sliderRef.current) return;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2;
+    const deltaY = centerY - clientY;
+    const sensitivity = 0.008;
+    const newValue = Math.max(0, Math.min(1.4, value + deltaY * sensitivity));
+    onChange(Math.round(newValue * 10) / 10);
+  }, [value, onChange]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!knobRef.current) return;
-      const rect = knobRef.current.getBoundingClientRect();
-      const centerY = rect.top + rect.height / 2;
-      const deltaY = centerY - e.clientY;
-      const newValue = Math.max(0, Math.min(1.4, value + deltaY * 0.01));
-      onChange(Math.round(newValue * 10) / 10);
+      handleInteraction(e.clientY);
     };
 
     const handleMouseUp = () => {
@@ -81,58 +84,72 @@ function EmotionKnob({
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
-  }, [value, onChange]);
+  }, [handleInteraction]);
 
-  const rotation = (value / 1.4) * 270 - 135; // -135 to 135 degrees
+  // Calculate the arc for the value display
+  const percentage = (value / 1.4) * 100;
+  const circumference = 2 * Math.PI * 24; // radius = 24
+  const strokeDashoffset = circumference - (percentage / 100) * circumference * 0.75;
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      {/* Knob */}
+    <div className="flex flex-col items-center">
+      {/* Circular control */}
       <div
-        ref={knobRef}
+        ref={sliderRef}
         onMouseDown={handleMouseDown}
         className={`
-          relative w-14 h-14 rounded-full cursor-grab active:cursor-grabbing
-          bg-cyber-bg-secondary border border-zinc-700/50
-          transition-all duration-200
-          ${isDragging ? 'scale-105 border-neon-purple/50' : 'hover:border-zinc-600'}
+          relative w-16 h-16 cursor-grab active:cursor-grabbing
+          transition-transform duration-150
+          ${isDragging ? 'scale-105' : ''}
         `}
-        style={{
-          boxShadow: isDragging
-            ? `0 0 20px ${color.replace('from-', '').replace(' to-', ', ').replace(/\w+-\d+/g, 'rgba(124, 58, 237, 0.3)')}`
-            : 'inset 0 2px 4px rgba(0,0,0,0.3)',
-        }}
       >
-        {/* Knob indicator */}
-        <div
-          className="absolute inset-2 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-900"
-          style={{ transform: `rotate(${rotation}deg)` }}
-        >
-          <div
-            className="absolute top-1 left-1/2 -translate-x-1/2 w-1 h-3 rounded-full bg-gradient-to-b from-neon-purple to-neon-cyan"
+        {/* Background circle */}
+        <svg className="w-full h-full -rotate-135" viewBox="0 0 56 56">
+          {/* Track */}
+          <circle
+            cx="28"
+            cy="28"
+            r="24"
+            fill="none"
+            stroke="var(--gray-5)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
           />
-        </div>
+          {/* Value arc */}
+          <circle
+            cx="28"
+            cy="28"
+            r="24"
+            fill="none"
+            stroke="var(--ios-purple)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
+            strokeDashoffset={strokeDashoffset}
+            className="transition-all duration-100"
+            style={{ opacity: value > 0 ? 1 : 0.3 }}
+          />
+        </svg>
 
-        {/* Glow ring when active */}
-        {value > 0.3 && (
-          <div
-            className="absolute inset-0 rounded-full opacity-30 blur-sm pointer-events-none"
-            style={{
-              background: `conic-gradient(from ${rotation - 135}deg, transparent, rgba(124, 58, 237, ${value / 1.4}), transparent)`,
-            }}
-          />
-        )}
+        {/* Center content */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className={`
+            w-10 h-10 rounded-full flex items-center justify-center
+            bg-bg-secondary shadow-ios-sm
+            ${isDragging ? 'shadow-ios-md' : ''}
+          `}>
+            <Icon className={`w-4 h-4 ${value > 0.5 ? 'text-ios-purple' : 'text-text-tertiary'}`} />
+          </div>
+        </div>
       </div>
 
       {/* Label and value */}
-      <div className="text-center">
-        <div className="flex items-center gap-1 justify-center mb-0.5">
-          <Icon className="w-3 h-3 text-zinc-500" />
-          <span className="text-[10px] text-zinc-500 uppercase tracking-wider">{label}</span>
-        </div>
-        <span className={`text-xs font-mono ${value > 0.5 ? 'text-neon-purple' : 'text-zinc-400'}`}>
+      <div className="text-center mt-2">
+        <span className="text-caption-1 text-text-tertiary">{label}</span>
+        <p className={`text-caption-1 font-medium ${value > 0.5 ? 'text-ios-purple' : 'text-text-secondary'}`}>
           {value.toFixed(1)}
-        </span>
+        </p>
       </div>
     </div>
   );
@@ -170,12 +187,12 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
       if (!file) return;
 
       if (!file.name.toLowerCase().endsWith('.wav')) {
-        setUploadError('Only .wav format supported');
+        setUploadError('仅支持 .wav 格式');
         return;
       }
 
       if (file.size > 10 * 1024 * 1024) {
-        setUploadError('File too large (max 10MB)');
+        setUploadError('文件过大 (最大 10MB)');
         return;
       }
 
@@ -188,10 +205,10 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
           setEmotionControl({ emoAudioPath: result.file_path });
           setUploadedFileName(file.name);
         } else {
-          setUploadError(result.message || 'Upload failed');
+          setUploadError(result.message || '上传失败');
         }
       } catch (error) {
-        setUploadError(error instanceof Error ? error.message : 'Upload failed');
+        setUploadError(error instanceof Error ? error.message : '上传失败');
       } finally {
         setIsUploading(false);
       }
@@ -217,47 +234,25 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
   const vectorSum = Object.values(emotionControl.emoVector).reduce((a, b) => a + b, 0);
   const isVectorWarning = vectorSum > 1.5;
 
-  // Get ambient glow color based on dominant emotion
-  const getAmbientColor = () => {
-    const emotions = emotionControl.emoVector;
-    const maxEmotion = Object.entries(emotions).reduce((a, b) => a[1] > b[1] ? a : b);
-    const colorMap: Record<string, string> = {
-      happy: 'rgba(16, 185, 129, 0.1)',
-      angry: 'rgba(239, 68, 68, 0.1)',
-      sad: 'rgba(59, 130, 246, 0.1)',
-      fear: 'rgba(245, 158, 11, 0.1)',
-      disgust: 'rgba(168, 85, 247, 0.1)',
-      surprise: 'rgba(236, 72, 153, 0.1)',
-      calm: 'rgba(6, 182, 212, 0.1)',
-      low: 'rgba(100, 116, 139, 0.1)',
-    };
-    return maxEmotion[1] > 0.3 ? colorMap[maxEmotion[0]] || 'transparent' : 'transparent';
-  };
-
   return (
-    <div
-      className={`cyber-card p-4 relative overflow-hidden ${className}`}
-      style={{
-        background: emotionControl.mode === 'vector'
-          ? `linear-gradient(135deg, ${getAmbientColor()}, transparent)`
-          : undefined,
-      }}
-    >
+    <div className={`ios-card p-4 ${className}`}>
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-neon-purple/10">
-        <div className="p-1.5 bg-gradient-to-br from-neon-purple/20 to-neon-cyan/10 rounded-md">
-          <Sparkles className="w-4 h-4 text-neon-purple" />
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-ios-purple/12 rounded-ios-sm">
+            <Sparkles className="w-4 h-4 text-ios-purple" />
+          </div>
+          <span className="text-subheadline font-medium text-text-primary">
+            情感控制
+          </span>
         </div>
-        <span className="text-sm font-medium text-zinc-300 uppercase tracking-wide">
-          Emotion Control
-        </span>
-        <span className="text-[9px] font-mono text-zinc-600 ml-auto">
-          MODE: {emotionControl.mode.toUpperCase()}
+        <span className="text-caption-2 text-text-quaternary">
+          {MODE_OPTIONS.find(m => m.value === emotionControl.mode)?.label}
         </span>
       </div>
 
-      {/* Mode selector */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+      {/* Mode selector - iOS segmented control style */}
+      <div className="grid grid-cols-4 gap-1 p-1 bg-fill-tertiary rounded-ios-sm mb-4">
         {MODE_OPTIONS.map((option) => {
           const Icon = option.icon;
           const isActive = emotionControl.mode === option.value;
@@ -265,20 +260,19 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
           return (
             <motion.button
               key={option.value}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => handleModeChange(option.value as EmotionMode)}
               className={`
-                p-3 rounded-md flex flex-col items-center gap-1 cursor-pointer
-                transition-all duration-200 border
-                ${
-                  isActive
-                    ? 'bg-neon-purple/10 text-white border-neon-purple/40'
-                    : 'bg-cyber-bg-secondary/30 text-zinc-400 hover:bg-cyber-bg-secondary/50 border-zinc-800/50'
+                py-2 px-2 rounded-md flex flex-col items-center gap-1 cursor-pointer
+                transition-all duration-150
+                ${isActive
+                  ? 'bg-bg-secondary shadow-ios-sm text-ios-purple'
+                  : 'text-text-tertiary'
                 }
               `}
             >
               <Icon className="w-4 h-4" />
-              <span className="text-[10px] font-medium uppercase tracking-wider">{option.label}</span>
+              <span className="text-caption-2 font-medium">{option.label}</span>
             </motion.button>
           );
         })}
@@ -289,13 +283,13 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
         {emotionControl.mode === 'preset' && (
           <motion.div
             key="preset"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="p-4 bg-cyber-bg-secondary/30 rounded-md text-center border border-zinc-800/30"
+            exit={{ opacity: 0, y: -8 }}
+            className="p-4 bg-fill-tertiary rounded-ios-sm text-center"
           >
-            <p className="text-sm text-zinc-500 font-mono">
-              <span className="text-neon-purple/50">$</span> Using preset emotion tags
+            <p className="text-subheadline text-text-secondary">
+              使用预设情感标签
             </p>
           </motion.div>
         )}
@@ -304,9 +298,9 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
         {emotionControl.mode === 'audio' && (
           <motion.div
             key="audio"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
             className="space-y-4"
           >
             <div className="relative">
@@ -324,115 +318,123 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
                   htmlFor="emotion-audio-upload"
                   className={`
                     flex flex-col items-center justify-center p-6
-                    bg-cyber-bg-secondary/30 rounded-md border border-dashed
-                    ${isUploading ? 'border-neon-purple/30' : 'border-zinc-700/50 hover:border-neon-purple/30'}
-                    cursor-pointer transition-all duration-200
+                    bg-fill-tertiary rounded-ios-md border-2 border-dashed
+                    ${isUploading ? 'border-ios-purple/40' : 'border-separator-opaque hover:border-ios-purple/40'}
+                    cursor-pointer transition-all duration-150
                   `}
                 >
                   {isUploading ? (
-                    <div className="cyber-spinner w-6 h-6" />
+                    <div className="ios-spinner" />
                   ) : (
                     <>
-                      <Upload className="w-6 h-6 text-neon-purple mb-2" />
-                      <span className="text-sm text-zinc-400">Upload emotion reference</span>
-                      <span className="text-[10px] text-zinc-600 mt-1 font-mono">
-                        .wav | MAX: 10MB
+                      <Upload className="w-6 h-6 text-ios-purple mb-2" />
+                      <span className="text-subheadline text-text-secondary">上传情感参考</span>
+                      <span className="text-caption-2 text-text-quaternary mt-1">
+                        支持 .wav 格式，最大 10MB
                       </span>
                     </>
                   )}
                 </label>
               ) : (
-                <div className="flex items-center gap-3 p-4 bg-cyber-bg-secondary/50 rounded-md border border-zinc-800/50">
-                  <div className="p-2 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-md">
+                <div className="flex items-center gap-3 p-4 bg-fill-tertiary rounded-ios-md">
+                  <div className="p-2 bg-ios-purple rounded-ios-sm">
                     <FileAudio className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate font-mono">
-                      {uploadedFileName || 'Uploaded audio'}
+                    <p className="text-subheadline font-medium text-text-primary truncate">
+                      {uploadedFileName || '已上传音频'}
                     </p>
-                    <p className="text-[10px] text-zinc-500">Emotion reference</p>
+                    <p className="text-caption-2 text-text-tertiary">情感参考</p>
                   </div>
                   <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileTap={{ scale: 0.92 }}
                     onClick={handleClearUpload}
-                    className="p-1.5 hover:bg-red-500/20 rounded-md transition-colors cursor-pointer"
+                    className="p-2 hover:bg-ios-red/12 rounded-ios-sm transition-colors cursor-pointer"
                   >
-                    <X className="w-4 h-4 text-zinc-400 hover:text-red-400" />
+                    <X className="w-4 h-4 text-text-tertiary hover:text-ios-red" />
                   </motion.button>
                 </div>
               )}
 
               {uploadError && (
-                <p className="text-xs text-red-400 mt-2 font-mono">ERROR: {uploadError}</p>
+                <p className="text-caption-1 text-ios-red mt-2">{uploadError}</p>
               )}
             </div>
 
             {/* Alpha slider */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-zinc-400 uppercase tracking-wider">Intensity (Alpha)</span>
-                <span className="text-xs font-mono text-neon-purple">{emotionControl.emoAlpha.toFixed(1)}</span>
+                <span className="text-subheadline text-text-secondary">强度 (Alpha)</span>
+                <span className="text-subheadline font-semibold text-ios-purple">
+                  {emotionControl.emoAlpha.toFixed(1)}
+                </span>
               </div>
-              <input
-                type="range"
-                min={0}
-                max={1.6}
-                step={0.1}
-                value={emotionControl.emoAlpha}
-                onChange={(e) => setEmotionControl({ emoAlpha: parseFloat(e.target.value) })}
-                className="cyber-slider w-full"
-              />
-              <p className="text-[10px] text-zinc-600 font-mono">0 = Pure timbre, 1.6 = Strong emotion</p>
+              <div className="relative h-8 flex items-center">
+                <div className="absolute inset-x-0 h-1 bg-gray-5 rounded-full" />
+                <div
+                  className="absolute left-0 h-1 rounded-full bg-ios-purple"
+                  style={{ width: `${(emotionControl.emoAlpha / 1.6) * 100}%` }}
+                />
+                <input
+                  type="range"
+                  min={0}
+                  max={1.6}
+                  step={0.1}
+                  value={emotionControl.emoAlpha}
+                  onChange={(e) => setEmotionControl({ emoAlpha: parseFloat(e.target.value) })}
+                  className="ios-slider relative z-10"
+                />
+              </div>
+              <p className="text-caption-2 text-text-quaternary">
+                0 = 纯音色，1.6 = 强烈情感
+              </p>
             </div>
           </motion.div>
         )}
 
-        {/* Vector mode - Knob controls */}
+        {/* Vector mode - Circular controls */}
         {emotionControl.mode === 'vector' && (
           <motion.div
             key="vector"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
             className="space-y-4"
           >
             {isVectorWarning && (
-              <div className="flex items-center gap-2 p-3 bg-amber-500/10 rounded-md border border-amber-500/20">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
-                <span className="text-[10px] text-amber-400 font-mono">
-                  WARN: Vector sum ({vectorSum.toFixed(1)}) exceeds 1.5
+              <div className="flex items-center gap-2 p-3 bg-ios-orange/12 rounded-ios-sm">
+                <AlertTriangle className="w-4 h-4 text-ios-orange" />
+                <span className="text-caption-1 text-ios-orange">
+                  向量总和 ({vectorSum.toFixed(1)}) 超过 1.5
                 </span>
               </div>
             )}
 
             <div className="flex justify-between items-center">
-              <span className="text-xs text-zinc-500 font-mono">8-DIMENSIONAL CONTROL</span>
+              <span className="text-caption-1 text-text-tertiary">8维情感控制</span>
               <motion.button
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={resetEmotionVector}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] text-zinc-400 hover:text-white bg-cyber-bg-secondary/50 hover:bg-cyber-bg-secondary rounded-md transition-colors cursor-pointer border border-zinc-800/50"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-caption-1 text-text-tertiary hover:text-ios-blue bg-fill-tertiary hover:bg-fill-secondary rounded-ios-sm transition-colors cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
-                RESET
+                重置
               </motion.button>
             </div>
 
-            {/* Knob grid */}
-            <div className="grid grid-cols-4 gap-4">
+            {/* Circular sliders grid */}
+            <div className="grid grid-cols-4 gap-3">
               {EMOTION_DIMENSIONS.map((dim) => {
                 const Icon = ICON_MAP[dim.key] || Smile;
                 const value = emotionControl.emoVector[dim.key as keyof EmotionVector];
 
                 return (
-                  <EmotionKnob
+                  <CircularSlider
                     key={dim.key}
                     value={value}
                     onChange={(v) => handleVectorChange(dim.key as keyof EmotionVector, v)}
                     label={dim.label}
                     icon={Icon}
-                    color={dim.color}
                   />
                 );
               })}
@@ -444,23 +446,23 @@ export default function EmotionControl({ className = '' }: EmotionControlProps) 
         {emotionControl.mode === 'text' && (
           <motion.div
             key="text"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
             className="space-y-3"
           >
-            <div className="p-4 bg-cyber-bg-secondary/30 rounded-md border border-zinc-800/30">
-              <label className="block text-xs text-zinc-400 mb-2 uppercase tracking-wider">
-                Emotion Analysis Text (Optional)
+            <div>
+              <label className="block text-subheadline text-text-secondary mb-2">
+                情感分析文本 (可选)
               </label>
               <textarea
                 value={emotionControl.emoText}
                 onChange={(e) => setEmotionControl({ emoText: e.target.value })}
-                placeholder="// Leave empty to analyze synthesis text..."
-                className="w-full h-24 resize-none bg-cyber-surface/80 border border-zinc-800/50 rounded-md p-3 text-sm text-white font-mono placeholder:text-zinc-600 focus:border-neon-purple/50 focus:outline-none transition-colors"
+                placeholder="留空则自动分析合成文本..."
+                className="ios-textarea w-full h-24 resize-none"
               />
-              <p className="text-[10px] text-zinc-600 mt-2 font-mono">
-                <span className="text-neon-purple/50">$</span> Auto emotion detection enabled
+              <p className="text-caption-2 text-text-quaternary mt-2">
+                自动情感检测已启用
               </p>
             </div>
           </motion.div>

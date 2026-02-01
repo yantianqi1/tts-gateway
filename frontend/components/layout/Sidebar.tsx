@@ -123,13 +123,6 @@ export default function Sidebar({ className = '' }: SidebarProps) {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="px-4 pb-4">
-        <div className="flex items-center justify-between text-[11px] text-text-quaternary">
-          <span>v1.0.0</span>
-          <span>iOS Design</span>
-        </div>
-      </div>
     </aside>
   );
 }

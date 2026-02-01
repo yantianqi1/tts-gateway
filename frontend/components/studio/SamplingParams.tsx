@@ -15,22 +15,22 @@ export default function SamplingParams({ className = '' }: SamplingParamsProps) 
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className={`cyber-card overflow-hidden ${className}`}>
+    <div className={`ios-card overflow-hidden ${className}`}>
       <motion.button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors"
+        className="w-full p-4 flex items-center justify-between cursor-pointer hover:bg-fill-tertiary transition-colors"
       >
         <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-gradient-to-br from-neon-blue/20 to-neon-cyan/10 rounded-lg">
-            <Settings2 className="w-4 h-4 text-neon-blue" />
+          <div className="p-1.5 bg-ios-blue/12 rounded-ios-sm">
+            <Settings2 className="w-4 h-4 text-ios-blue" />
           </div>
-          <span className="text-sm font-medium text-slate-300">采样参数</span>
+          <span className="text-subheadline font-medium text-text-primary">采样参数</span>
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-4 h-4 text-slate-400" />
+          <ChevronDown className="w-4 h-4 text-text-tertiary" />
         </motion.div>
       </motion.button>
 

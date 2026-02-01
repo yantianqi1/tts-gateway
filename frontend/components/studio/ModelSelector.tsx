@@ -52,21 +52,24 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
   };
 
   const getColorClasses = (color: string, isSelected: boolean) => {
-    const colors: Record<string, { bg: string; border: string; icon: string }> = {
+    const colors: Record<string, { bg: string; border: string; icon: string; text: string }> = {
       purple: {
-        bg: isSelected ? 'bg-ios-purple/12' : 'bg-fill-tertiary',
-        border: isSelected ? 'border-ios-purple/30' : 'border-transparent',
+        bg: isSelected ? 'bg-ios-purple/15' : 'bg-fill-tertiary',
+        border: isSelected ? 'border-ios-purple' : 'border-transparent',
         icon: 'bg-ios-purple',
+        text: isSelected ? 'text-ios-purple' : 'text-text-secondary',
       },
       pink: {
-        bg: isSelected ? 'bg-ios-pink/12' : 'bg-fill-tertiary',
-        border: isSelected ? 'border-ios-pink/30' : 'border-transparent',
+        bg: isSelected ? 'bg-ios-pink/15' : 'bg-fill-tertiary',
+        border: isSelected ? 'border-ios-pink' : 'border-transparent',
         icon: 'bg-ios-pink',
+        text: isSelected ? 'text-ios-pink' : 'text-text-secondary',
       },
       blue: {
-        bg: isSelected ? 'bg-ios-blue/12' : 'bg-fill-tertiary',
-        border: isSelected ? 'border-ios-blue/30' : 'border-transparent',
+        bg: isSelected ? 'bg-ios-blue/15' : 'bg-fill-tertiary',
+        border: isSelected ? 'border-ios-blue' : 'border-transparent',
         icon: 'bg-ios-blue',
+        text: isSelected ? 'text-ios-blue' : 'text-text-secondary',
       },
     };
     return colors[color] || colors.purple;
@@ -131,9 +134,7 @@ export default function ModelSelector({ className = '' }: ModelSelectorProps) {
 
               {/* Model name */}
               <h3
-                className={`text-subheadline font-semibold text-center ${
-                  isSelected ? 'text-text-primary' : 'text-text-secondary'
-                }`}
+                className={`text-subheadline font-semibold text-center ${colorClasses.text}`}
               >
                 {model.name}
               </h3>
