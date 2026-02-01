@@ -16,7 +16,7 @@ NC='\033[0m'
 
 # 配置
 GATEWAY_URL="${GATEWAY_URL:-http://localhost:8000}"
-FRONTEND_URL="${FRONTEND_URL:-http://localhost:3000}"
+FRONTEND_URL="${FRONTEND_URL:-http://localhost:3098}"
 TIMEOUT=5
 
 # ============================================
