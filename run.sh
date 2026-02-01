@@ -23,14 +23,14 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# 目录配置
+# 目录配置（可通过环境变量覆盖）
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
-BASE_DIR="$(dirname "$PROJECT_DIR")"
+BASE_DIR="${TTS_GATEWAY_BASE_DIR:-$(dirname "$PROJECT_DIR")}"
 FRONTEND_DIR="$PROJECT_DIR/frontend"
 GATEWAY_DIR="$PROJECT_DIR/gateway"
-QWEN_TTS_DIR="$BASE_DIR/qwen3-tts-server"
-INDEXTTS_DIR="$BASE_DIR/index-tts"
+QWEN_TTS_DIR="${TTS_GATEWAY_QWEN_DIR:-$BASE_DIR/qwen3-tts-server}"
+INDEXTTS_DIR="${TTS_GATEWAY_INDEXTTS_DIR:-$BASE_DIR/index-tts}"
 LOG_DIR="$PROJECT_DIR/logs"
 PID_DIR="$PROJECT_DIR/pids"
 
@@ -1147,8 +1147,17 @@ show_help() {
     echo "  $0 15        # 启动 IndexTTS (使用数字)"
     echo ""
     echo "环境变量配置:"
-    echo "  在项目根目录创建 .env 文件，配置 NEXT_PUBLIC_API_URL 等变量"
-    echo "  示例: NEXT_PUBLIC_API_URL=http://gpu-server:8080"
+    echo "  在项目根目录创建 .env 文件，或直接设置环境变量:"
+    echo ""
+    echo "  TTS_GATEWAY_QWEN_DIR     Qwen3-TTS 服务目录路径"
+    echo "  TTS_GATEWAY_INDEXTTS_DIR IndexTTS 服务目录路径"
+    echo "  TTS_GATEWAY_BASE_DIR     TTS 服务基础目录 (默认为 tts-gateway 的父目录)"
+    echo "  NEXT_PUBLIC_API_URL      前端 API 地址"
+    echo ""
+    echo "  示例:"
+    echo "    export TTS_GATEWAY_QWEN_DIR=/root/qwen3-tts-server"
+    echo "    export TTS_GATEWAY_INDEXTTS_DIR=/root/index-tts"
+    echo "    $0 14  # 启动 Qwen3-TTS"
     echo ""
     echo "不带参数运行将进入交互式菜单"
 }
