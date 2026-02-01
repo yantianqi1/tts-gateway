@@ -1,23 +1,25 @@
 'use client';
 
-import { forwardRef } from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
+import { forwardRef, ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
-interface CardProps extends HTMLMotionProps<'div'> {
+interface CardProps {
   variant?: 'default' | 'magenta' | 'purple' | 'glass';
   hover?: boolean;
   padding?: 'none' | 'sm' | 'md' | 'lg';
   scanLine?: boolean;
+  className?: string;
+  children?: ReactNode;
 }
 
-const variants = {
+const variants: Record<string, string> = {
   default: 'cyber-card',
   magenta: 'cyber-card-magenta',
   purple: 'cyber-card border-neon-purple/20 hover:border-neon-purple/40',
   glass: 'bg-cyber-bg-secondary/30 backdrop-blur-xl border border-zinc-800/50 rounded-md',
 };
 
-const paddings = {
+const paddings: Record<string, string> = {
   none: '',
   sm: 'p-3',
   md: 'p-4',
@@ -33,7 +35,6 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       scanLine = false,
       className = '',
       children,
-      ...props
     },
     ref
   ) => {
@@ -47,12 +48,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           relative overflow-hidden
           ${className}
         `}
-        {...props}
       >
-        {/* Scan line effect */}
         {scanLine && <div className="card-scan-line" />}
-
-        {/* Content */}
         {children}
       </motion.div>
     );
