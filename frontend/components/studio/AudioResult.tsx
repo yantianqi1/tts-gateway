@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Trash2, Volume2, Clock, Cpu, Waveform } from 'lucide-react';
+import { Download, Trash2, Volume2, Clock, Cpu } from 'lucide-react';
 import { useHistoryStore } from '@/lib/store/historyStore';
 import { useAudioPlayer } from '@/lib/hooks/useTTS';
 import Badge from '@/components/ui/Badge';
