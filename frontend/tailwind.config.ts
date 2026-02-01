@@ -8,111 +8,117 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Deep space cyberpunk palette
-        cyber: {
-          bg: '#050505',           // Pure deep space
-          'bg-secondary': '#121214', // Matte metal
-          'bg-card': 'rgba(18, 18, 20, 0.5)',
-          surface: '#0A0A0B',      // Deep carbon gray
+        // Dopamine Light Theme - Multi-color Pastel Palette
+        dopamine: {
+          // Base backgrounds - warm white/cream tones
+          bg: '#FEFCFB',              // Warm white
+          'bg-secondary': '#FBF9F8',   // Soft cream
+          'bg-card': 'rgba(255, 255, 255, 0.7)',
+          surface: '#FFFFFF',          // Pure white for cards
+
+          // Primary pastels - harmonious multi-color
+          purple: '#A78BFA',           // Soft violet
+          pink: '#F9A8D4',             // Candy pink
+          blue: '#7DD3FC',             // Sky blue
+          mint: '#6EE7B7',             // Fresh mint
+          peach: '#FDBA74',            // Warm peach
+          coral: '#FDA4AF',            // Soft coral
+          lavender: '#C4B5FD',         // Light lavender
+
+          // Accent colors for UI elements
+          accent: '#8B5CF6',           // Vibrant purple (primary action)
+          'accent-secondary': '#06B6D4', // Teal (secondary)
+          success: '#10B981',          // Emerald green
+          warning: '#F59E0B',          // Amber
+          error: '#EF4444',            // Red
         },
-        neon: {
-          cyan: '#06B6D4',         // Tech cyan (secondary/decoration)
-          magenta: '#ff00ff',
-          purple: '#7C3AED',       // Cyber purple (primary glow)
-          blue: '#2563EB',         // Cobalt blue (alternative primary)
-          pink: '#ec4899',
-          green: '#10B981',        // Matrix green (status)
-        },
-        // Accent colors
-        accent: {
-          primary: '#7C3AED',      // Electric purple
-          secondary: '#06B6D4',    // Cyan
-          success: '#10B981',      // Matrix green
-          warning: '#F59E0B',
-          danger: '#EF4444',
-          muted: '#3F3F46',        // Inactive gray
+
+        // Glass morphism colors
+        glass: {
+          white: 'rgba(255, 255, 255, 0.6)',
+          'white-hover': 'rgba(255, 255, 255, 0.8)',
+          border: 'rgba(255, 255, 255, 0.3)',
+          'border-strong': 'rgba(255, 255, 255, 0.5)',
         },
       },
+
       borderRadius: {
-        'cyber': '4px',            // Industrial small radius
-        'cyber-lg': '6px',
+        'glass': '16px',
+        'glass-lg': '24px',
+        'glass-sm': '12px',
       },
+
       animation: {
-        'cyber-shine': 'cyber-shine 3s infinite',
-        'grid-move': 'grid-move 20s linear infinite',
-        'pulse-neon': 'pulse-neon 2s ease-in-out infinite',
-        'scan-line': 'scan-line 4s linear infinite',
-        'scan-card': 'scan-card 3s linear infinite',
-        'glitch': 'glitch 0.3s ease-in-out',
-        'block-cursor': 'block-cursor 1s ease-in-out infinite',
-        'data-stream': 'data-stream 0.8s linear',
-        'light-flow': 'light-flow 2s linear infinite',
-        'breathing': 'breathing 2s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+        'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 8s ease infinite',
+        'blob': 'blob 7s infinite',
+        'fade-in': 'fade-in 0.5s ease-out',
+        'slide-up': 'slide-up 0.5s ease-out',
+        'bounce-soft': 'bounce-soft 2s infinite',
       },
+
       keyframes: {
-        'cyber-shine': {
-          '0%': { transform: 'translateX(-100%)' },
-          '50%, 100%': { transform: 'translateX(100%)' },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
-        'grid-move': {
-          '0%': { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '16px 16px' },
+        'shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
-        'pulse-neon': {
+        'pulse-soft': {
           '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.5' },
+          '50%': { opacity: '0.7' },
         },
-        'scan-line': {
-          '0%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(100vh)' },
-        },
-        'scan-card': {
-          '0%': { transform: 'translateY(-100%)', opacity: '0' },
-          '10%': { opacity: '1' },
-          '90%': { opacity: '1' },
-          '100%': { transform: 'translateY(100%)', opacity: '0' },
-        },
-        'glitch': {
-          '0%, 100%': { transform: 'translate(0)' },
-          '20%': { transform: 'translate(-2px, 2px)' },
-          '40%': { transform: 'translate(2px, -2px)' },
-          '60%': { transform: 'translate(-2px, -2px)' },
-          '80%': { transform: 'translate(2px, 2px)' },
-        },
-        'block-cursor': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.3' },
-        },
-        'data-stream': {
-          '0%': { transform: 'translateY(-100%)', opacity: '1' },
-          '100%': { transform: 'translateY(100%)', opacity: '0' },
-        },
-        'light-flow': {
-          '0%': { backgroundPosition: '0% 50%' },
+        'gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
-          '100%': { backgroundPosition: '0% 50%' },
         },
-        'breathing': {
-          '0%, 100%': { boxShadow: '0 0 5px var(--glow-color)', opacity: '0.8' },
-          '50%': { boxShadow: '0 0 20px var(--glow-color)', opacity: '1' },
+        'blob': {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+          '100%': { transform: 'translate(0, 0) scale(1)' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'bounce-soft': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
         },
       },
+
       boxShadow: {
-        'neon-cyan': '0 0 10px #06B6D4, 0 0 20px rgba(6, 182, 212, 0.5)',
-        'neon-magenta': '0 0 10px #ff00ff, 0 0 20px rgba(255, 0, 255, 0.5)',
-        'neon-purple': '0 0 10px #7C3AED, 0 0 20px rgba(124, 58, 237, 0.5)',
-        'neon-green': '0 0 10px #10B981, 0 0 20px rgba(16, 185, 129, 0.5)',
-        'glass': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
-        'cyber-card': '0 0 30px rgba(124, 58, 237, 0.1), inset 0 0 60px rgba(124, 58, 237, 0.02)',
+        'glass': '0 4px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+        'glass-hover': '0 8px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+        'glass-lg': '0 10px 50px rgba(0, 0, 0, 0.1), inset 0 2px 0 rgba(255, 255, 255, 0.6)',
+        'dopamine': '0 4px 20px rgba(139, 92, 246, 0.15)',
+        'dopamine-pink': '0 4px 20px rgba(249, 168, 212, 0.25)',
+        'dopamine-blue': '0 4px 20px rgba(125, 211, 252, 0.25)',
+        'dopamine-mint': '0 4px 20px rgba(110, 231, 183, 0.25)',
+        'soft': '0 2px 10px rgba(0, 0, 0, 0.04)',
       },
+
       backgroundImage: {
-        'gradient-neon': 'linear-gradient(135deg, #7C3AED, #06B6D4)',
-        'gradient-button': 'linear-gradient(90deg, #7C3AED, #06B6D4)',
-        'gradient-purple': 'linear-gradient(135deg, #7C3AED, #A855F7)',
-        'gradient-flow': 'linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.5), transparent)',
+        'gradient-dopamine': 'linear-gradient(135deg, #A78BFA 0%, #F9A8D4 50%, #7DD3FC 100%)',
+        'gradient-candy': 'linear-gradient(135deg, #F9A8D4 0%, #FDBA74 100%)',
+        'gradient-ocean': 'linear-gradient(135deg, #7DD3FC 0%, #6EE7B7 100%)',
+        'gradient-sunset': 'linear-gradient(135deg, #FDA4AF 0%, #FDBA74 100%)',
+        'gradient-aurora': 'linear-gradient(135deg, #C4B5FD 0%, #7DD3FC 50%, #6EE7B7 100%)',
+        'gradient-shimmer': 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)',
       },
+
       backdropBlur: {
-        'cyber': '20px',
+        'glass': '20px',
+        'glass-lg': '40px',
       },
     },
   },

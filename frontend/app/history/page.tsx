@@ -21,7 +21,7 @@ import Badge from '@/components/ui/Badge';
 
 export default function HistoryPage() {
   const { history, removeResult, clearHistory } = useHistoryStore();
-  const { play, isPlaying } = useAudioPlayer();
+  const { play } = useAudioPlayer();
   const [searchQuery, setSearchQuery] = useState('');
 
   // Filter history by search
@@ -94,12 +94,12 @@ export default function HistoryPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-neon-green to-neon-cyan rounded-xl">
-              <History className="w-6 h-6 text-cyber-bg" />
+            <div className="p-2.5 bg-gradient-ocean rounded-glass-sm shadow-dopamine-mint">
+              <History className="w-6 h-6 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-bold gradient-text">生成历史</h1>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-gray-500">
                 共 {history.length} 条记录
               </p>
             </div>
@@ -124,13 +124,13 @@ export default function HistoryPage() {
         {/* Search */}
         {history.length > 0 && (
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜索历史记录..."
-              className="cyber-input w-full pl-10"
+              className="dopamine-input w-full pl-10"
             />
           </div>
         )}
@@ -138,18 +138,18 @@ export default function HistoryPage() {
 
       {/* Content */}
       {history.length === 0 ? (
-        <Card variant="default" padding="lg" className="text-center py-12">
-          <History className="w-12 h-12 mx-auto mb-4 text-slate-600" />
-          <h3 className="text-lg font-semibold text-white mb-2">暂无历史记录</h3>
-          <p className="text-sm text-slate-500">
+        <Card variant="glass" padding="lg" className="text-center py-12">
+          <History className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">暂无历史记录</h3>
+          <p className="text-sm text-gray-500">
             生成的语音将自动保存到这里
           </p>
         </Card>
       ) : filteredHistory.length === 0 ? (
-        <Card variant="default" padding="lg" className="text-center py-12">
-          <Search className="w-12 h-12 mx-auto mb-4 text-slate-600" />
-          <h3 className="text-lg font-semibold text-white mb-2">没有匹配的结果</h3>
-          <p className="text-sm text-slate-500">
+        <Card variant="glass" padding="lg" className="text-center py-12">
+          <Search className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">没有匹配的结果</h3>
+          <p className="text-sm text-gray-500">
             尝试其他搜索关键词
           </p>
         </Card>
@@ -163,7 +163,7 @@ export default function HistoryPage() {
               exit={{ opacity: 0, y: -20 }}
               className="mb-6"
             >
-              <h2 className="text-sm font-medium text-slate-400 mb-3 flex items-center gap-2">
+              <h2 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 {date}
               </h2>
@@ -176,24 +176,24 @@ export default function HistoryPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, x: -100 }}
-                    className="cyber-card p-4"
+                    className="glass-card p-4"
                   >
                     <div className="flex items-start gap-4">
                       {/* Time */}
-                      <div className="text-xs text-slate-500 pt-1">
+                      <div className="text-xs text-gray-400 pt-1">
                         {formatTime(item.timestamp)}
                       </div>
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-white line-clamp-2 mb-2">
+                        <p className="text-sm text-gray-700 line-clamp-2 mb-2">
                           {item.text}
                         </p>
 
                         {/* Metadata */}
                         <div className="flex items-center gap-2 flex-wrap">
                           <Badge
-                            variant={item.model === 'qwen3-tts' ? 'info' : 'purple'}
+                            variant={item.model === 'qwen3-tts' ? 'purple' : 'pink'}
                             size="sm"
                           >
                             <Cpu className="w-3 h-3 mr-1" />
@@ -204,7 +204,7 @@ export default function HistoryPage() {
                             {item.voice}
                           </Badge>
                           {item.emotion && item.emotion !== 'default' && (
-                            <Badge variant="default" size="sm">
+                            <Badge variant="mint" size="sm">
                               {item.emotion}
                             </Badge>
                           )}
@@ -219,7 +219,7 @@ export default function HistoryPage() {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => play(item.audioUrl!)}
-                              className="p-2 text-slate-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-2 text-gray-400 hover:text-dopamine-purple hover:bg-dopamine-purple/10 rounded-lg transition-colors cursor-pointer"
                               title="播放"
                             >
                               <Play className="w-4 h-4" />
@@ -228,7 +228,7 @@ export default function HistoryPage() {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => handleDownload(item.audioUrl!, item.text)}
-                              className="p-2 text-slate-400 hover:text-neon-green hover:bg-neon-green/10 rounded-lg transition-colors cursor-pointer"
+                              className="p-2 text-gray-400 hover:text-dopamine-mint hover:bg-dopamine-mint/10 rounded-lg transition-colors cursor-pointer"
                               title="下载"
                             >
                               <Download className="w-4 h-4" />
@@ -239,7 +239,7 @@ export default function HistoryPage() {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => removeResult(item.id)}
-                          className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors cursor-pointer"
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                           title="删除"
                         >
                           <Trash2 className="w-4 h-4" />

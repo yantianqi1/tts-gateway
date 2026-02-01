@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mic2, Gauge, Terminal } from 'lucide-react';
+import { Mic2, Gauge } from 'lucide-react';
 import { useTTSStore } from '@/lib/store/ttsStore';
 import TextInput from '@/components/studio/TextInput';
 import ModelSelector from '@/components/studio/ModelSelector';
@@ -25,19 +25,13 @@ export default function StudioPage() {
         className="mb-6"
       >
         <div className="flex items-center gap-4 mb-2">
-          <div className="p-2.5 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-md">
-            <Mic2 className="w-6 h-6 text-cyber-bg" />
+          <div className="p-2.5 bg-gradient-dopamine rounded-glass-sm shadow-dopamine">
+            <Mic2 className="w-6 h-6 text-white" />
           </div>
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold gradient-text tracking-tight">Voice Studio</h1>
-              <span className="text-[10px] font-mono text-zinc-600 bg-zinc-800/50 px-2 py-0.5 rounded">
-                SYNTH_MODULE
-              </span>
-            </div>
-            <p className="text-sm text-zinc-500 font-mono mt-0.5">
-              <Terminal className="w-3 h-3 inline mr-1" />
-              High-quality AI voice synthesis
+            <h1 className="text-2xl font-bold gradient-text tracking-tight">语音工作室</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              高质量 AI 语音合成
             </p>
           </div>
         </div>
@@ -53,17 +47,17 @@ export default function StudioPage() {
           className="lg:col-span-3 space-y-5"
         >
           {/* Text Input */}
-          <Card variant="default" padding="lg">
+          <Card variant="glass" padding="lg">
             <TextInput />
           </Card>
 
           {/* Model Selection */}
-          <Card variant="default" padding="lg">
+          <Card variant="glass" padding="lg">
             <ModelSelector />
           </Card>
 
           {/* Voice Selection */}
-          <Card variant="default" padding="lg">
+          <Card variant="glass" padding="lg">
             <VoiceSelector />
           </Card>
 
@@ -75,7 +69,7 @@ export default function StudioPage() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Card variant={config.model === 'qwen3-tts' ? 'default' : 'magenta'} padding="lg">
+              <Card variant={config.model === 'qwen3-tts' ? 'glass' : 'pink'} padding="lg">
                 {config.model === 'qwen3-tts' ? (
                   <QwenSettings />
                 ) : (
@@ -86,15 +80,11 @@ export default function StudioPage() {
           )}
 
           {/* Speed Control */}
-          <Card variant="default" padding="lg">
+          <Card variant="glass" padding="lg">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-2 h-2 rounded-sm bg-gradient-to-br from-neon-purple to-neon-cyan" />
-              <Gauge className="w-4 h-4 text-neon-purple" />
-              <span className="text-sm font-medium text-zinc-300 uppercase tracking-wide">
-                Speed Control
-              </span>
-              <span className="text-[9px] font-mono text-zinc-600 ml-auto">
-                RATE_MOD
+              <Gauge className="w-4 h-4 text-dopamine-purple" />
+              <span className="text-sm font-medium text-gray-700">
+                语速控制
               </span>
             </div>
             <Slider
@@ -102,9 +92,9 @@ export default function StudioPage() {
               max={2.0}
               step={0.1}
               value={config.speed}
-              onChange={(e) => setConfig({ speed: parseFloat(e.target.value) })}
-              valueFormatter={(v) => `${v.toFixed(1)}x`}
-              hint="Adjust playback speed, 1.0 = normal"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ speed: parseFloat(e.target.value) })}
+              valueFormatter={(v: number) => `${v.toFixed(1)}x`}
+              hint="调整播放速度，1.0 为正常速度"
             />
           </Card>
 
@@ -119,7 +109,7 @@ export default function StudioPage() {
           transition={{ delay: 0.2 }}
           className="lg:col-span-2"
         >
-          <Card variant="default" padding="lg" className="sticky top-6">
+          <Card variant="glass" padding="lg" className="sticky top-6">
             <AudioResult />
           </Card>
         </motion.div>

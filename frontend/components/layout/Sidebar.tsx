@@ -9,7 +9,6 @@ import {
   History,
   Settings,
   Waves,
-  Zap,
   Activity,
 } from 'lucide-react';
 
@@ -18,10 +17,10 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { href: '/studio', icon: Mic2, label: 'Studio', techLabel: 'SYNTH_01' },
-  { href: '/voices', icon: Users, label: 'Voices', techLabel: 'VOICE_DB' },
-  { href: '/history', icon: History, label: 'History', techLabel: 'LOG_SYS' },
-  { href: '/settings', icon: Settings, label: 'Settings', techLabel: 'CONFIG' },
+  { href: '/studio', icon: Mic2, label: '工作室' },
+  { href: '/voices', icon: Users, label: '音色库' },
+  { href: '/history', icon: History, label: '历史记录' },
+  { href: '/settings', icon: Settings, label: '设置' },
 ];
 
 export default function Sidebar({ className = '' }: SidebarProps) {
@@ -29,24 +28,23 @@ export default function Sidebar({ className = '' }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 bottom-0 w-64 bg-cyber-bg-secondary/60 backdrop-blur-xl border-r border-neon-purple/10 flex flex-col z-50 ${className}`}
+      className={`fixed left-0 top-0 bottom-0 w-64 frosted-glass border-r border-white/20 flex flex-col z-50 ${className}`}
     >
       {/* Logo Section */}
-      <div className="p-6 border-b border-neon-purple/10">
+      <div className="p-6 border-b border-white/10">
         <Link href="/studio" className="flex items-center gap-3 group">
           <motion.div
-            whileHover={{ rotate: 180 }}
-            transition={{ duration: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
             className="relative"
           >
-            <div className="w-10 h-10 rounded-md bg-gradient-to-br from-neon-purple to-neon-cyan flex items-center justify-center">
-              <Waves className="w-5 h-5 text-cyber-bg" />
+            <div className="w-10 h-10 rounded-glass-sm bg-gradient-dopamine flex items-center justify-center shadow-dopamine">
+              <Waves className="w-5 h-5 text-white" />
             </div>
-            <div className="absolute inset-0 rounded-md bg-gradient-to-br from-neon-purple to-neon-cyan opacity-40 blur-lg" />
           </motion.div>
           <div>
-            <h1 className="text-lg font-bold gradient-text tracking-tight">TTS Gateway</h1>
-            <p className="text-[10px] text-zinc-600 font-mono tracking-wider">CYBERPUNK.VOICE.SYS</p>
+            <h1 className="text-lg font-bold gradient-text tracking-tight">语音合成</h1>
+            <p className="text-[11px] text-gray-500">TTS Gateway</p>
           </div>
         </Link>
       </div>
@@ -62,11 +60,11 @@ export default function Sidebar({ className = '' }: SidebarProps) {
               <motion.div
                 whileTap={{ scale: 0.98 }}
                 className={`
-                  relative flex items-center gap-3 px-4 py-3 rounded-md
-                  transition-all duration-200 cursor-pointer group
+                  relative flex items-center gap-3 px-4 py-3 rounded-glass-sm
+                  transition-all duration-200 cursor-pointer
                   ${isActive
-                    ? 'bg-neon-purple/10 text-white'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-dopamine-purple/15 text-dopamine-accent'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
                   }
                 `}
               >
@@ -74,30 +72,20 @@ export default function Sidebar({ className = '' }: SidebarProps) {
                 {isActive && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-gradient-to-b from-neon-purple to-neon-cyan"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-dopamine rounded-r-full"
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 )}
 
                 {/* Icon */}
-                <div className="relative">
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-neon-purple' : ''}`} />
-                  {isActive && (
-                    <div className="absolute inset-0 blur-md bg-neon-purple/50 rounded-full" />
-                  )}
-                </div>
+                <Icon className={`w-5 h-5 ${isActive ? 'text-dopamine-accent' : ''}`} />
 
                 {/* Label */}
                 <span className="font-medium text-sm">{item.label}</span>
 
-                {/* Tech label */}
-                <span className={`ml-auto text-[9px] font-mono ${isActive ? 'text-neon-purple/60' : 'text-zinc-600'}`}>
-                  {item.techLabel}
-                </span>
-
-                {/* Active pulse indicator */}
+                {/* Active indicator dot */}
                 {isActive && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-neon-purple animate-pulse" />
+                  <div className="ml-auto w-2 h-2 rounded-full bg-dopamine-purple animate-pulse-soft" />
                 )}
               </motion.div>
             </Link>
@@ -106,50 +94,50 @@ export default function Sidebar({ className = '' }: SidebarProps) {
       </nav>
 
       {/* Backend Status Section */}
-      <div className="p-4 border-t border-neon-purple/10">
-        <div className="p-4 bg-cyber-surface/50 rounded-md border border-zinc-800/50">
+      <div className="p-4 border-t border-white/10">
+        <div className="p-4 glass-card rounded-glass-sm">
           {/* Header */}
           <div className="flex items-center gap-2 mb-3">
-            <Activity className="w-4 h-4 text-neon-purple" />
-            <span className="text-xs font-medium text-white uppercase tracking-wider">System Status</span>
+            <Activity className="w-4 h-4 text-dopamine-purple" />
+            <span className="text-xs font-medium text-gray-700">系统状态</span>
           </div>
 
           {/* Status items */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-zinc-400 font-mono">Qwen3-TTS</span>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Qwen3-TTS</span>
               <div className="flex items-center gap-2">
                 <div className="status-online" />
-                <span className="text-neon-green font-mono">READY</span>
+                <span className="text-dopamine-success font-medium">就绪</span>
               </div>
             </div>
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-zinc-400 font-mono">IndexTTS</span>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">IndexTTS</span>
               <div className="flex items-center gap-2">
                 <div className="status-online" />
-                <span className="text-neon-green font-mono">READY</span>
+                <span className="text-dopamine-success font-medium">就绪</span>
               </div>
             </div>
           </div>
 
-          {/* Decorative separator */}
-          <div className="mt-3 pt-3 border-t border-zinc-800/50">
-            <div className="flex items-center justify-between text-[9px] text-zinc-600 font-mono">
-              <span>GPU_MEM</span>
+          {/* GPU Memory */}
+          <div className="mt-3 pt-3 border-t border-gray-200/50">
+            <div className="flex items-center justify-between text-[10px] text-gray-500 mb-1">
+              <span>GPU 内存</span>
               <span>8.2 / 24 GB</span>
             </div>
-            <div className="mt-1 h-1 bg-zinc-800/50 rounded-sm overflow-hidden">
-              <div className="h-full w-[34%] bg-gradient-to-r from-neon-purple to-neon-cyan" />
+            <div className="h-1.5 bg-gray-200/50 rounded-full overflow-hidden">
+              <div className="h-full w-[34%] bg-gradient-dopamine rounded-full" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Footer tech decoration */}
+      {/* Footer */}
       <div className="px-4 pb-4">
-        <div className="flex items-center justify-between text-[9px] text-zinc-700 font-mono">
+        <div className="flex items-center justify-between text-[10px] text-gray-400">
           <span>v1.0.0</span>
-          <span>BUILD_2024</span>
+          <span>多巴胺主题</span>
         </div>
       </div>
     </aside>

@@ -72,12 +72,12 @@ export default function VoicesPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-neon-purple to-neon-magenta rounded-xl">
+            <div className="p-2.5 bg-gradient-dopamine rounded-glass-sm shadow-dopamine">
               <Users className="w-6 h-6 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-bold gradient-text">音色管理</h1>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-gray-500">
                 管理 {voices?.length || 0} 个音色
               </p>
             </div>
@@ -106,7 +106,7 @@ export default function VoicesPage() {
         {/* Tabs and Search */}
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Tabs */}
-          <div className="flex items-center gap-2 p-1 bg-cyber-bg-secondary/50 rounded-xl">
+          <div className="flex items-center gap-1 p-1 glass-card rounded-glass-sm">
             {TABS.map((tab) => (
               <motion.button
                 key={tab.id}
@@ -116,8 +116,8 @@ export default function VoicesPage() {
                   px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer
                   ${
                     voicesTab === tab.id
-                      ? 'bg-gradient-to-r from-neon-cyan/20 to-neon-purple/10 text-white'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-gradient-dopamine text-white shadow-dopamine'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-white/50'
                   }
                 `}
               >
@@ -128,13 +128,13 @@ export default function VoicesPage() {
 
           {/* Search */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜索音色..."
-              className="cyber-input w-full pl-10"
+              className="dopamine-input w-full pl-10"
             />
           </div>
         </div>
@@ -146,15 +146,15 @@ export default function VoicesPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="h-40 rounded-xl bg-cyber-bg-secondary/50 animate-pulse"
+              className="h-40 rounded-glass glass-card animate-pulse"
             />
           ))}
         </div>
       ) : filteredVoices.length === 0 ? (
-        <Card variant="default" padding="lg" className="text-center py-12">
-          <Users className="w-12 h-12 mx-auto mb-4 text-slate-600" />
-          <h3 className="text-lg font-semibold text-white mb-2">暂无音色</h3>
-          <p className="text-sm text-slate-500 mb-4">
+        <Card variant="glass" padding="lg" className="text-center py-12">
+          <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">暂无音色</h3>
+          <p className="text-sm text-gray-500 mb-4">
             {searchQuery ? '没有匹配的搜索结果' : '上传您的第一个音色开始使用'}
           </p>
           {!searchQuery && (
@@ -178,14 +178,14 @@ export default function VoicesPage() {
               className="mb-8"
             >
               {voicesTab === 'all' && (
-                <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
-                      backend === 'qwen3-tts' ? 'bg-neon-cyan' : 'bg-neon-magenta'
+                      backend === 'qwen3-tts' ? 'bg-dopamine-purple' : 'bg-dopamine-pink'
                     }`}
                   />
                   {backend}
-                  <span className="text-sm text-slate-500 font-normal">
+                  <span className="text-sm text-gray-400 font-normal">
                     ({backendVoices.length})
                   </span>
                 </h2>

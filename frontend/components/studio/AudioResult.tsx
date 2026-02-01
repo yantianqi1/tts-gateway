@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Trash2, Volume2, Clock, Cpu } from 'lucide-react';
 import { useHistoryStore } from '@/lib/store/historyStore';
+import type { AudioResult as AudioResultType } from '@/types/models';
 import { useAudioPlayer } from '@/lib/hooks/useTTS';
 import Badge from '@/components/ui/Badge';
 import AudioPlayer from '@/components/audio/AudioPlayer';
@@ -27,26 +28,15 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
   if (sessionResults.length === 0) {
     return (
       <div className={`flex flex-col items-center justify-center py-16 ${className}`}>
-        <div className="w-16 h-16 rounded-md bg-zinc-800/30 flex items-center justify-center mb-4 border border-zinc-800/50">
-          <Volume2 className="w-8 h-8 text-zinc-700" />
+        <div className="w-16 h-16 rounded-glass-sm bg-gradient-dopamine/20 flex items-center justify-center mb-4">
+          <Volume2 className="w-8 h-8 text-dopamine-purple/50" />
         </div>
-        <p className="text-zinc-500 text-center font-mono text-sm">
-          OUTPUT_QUEUE: EMPTY
+        <p className="text-gray-500 text-center text-sm font-medium">
+          暂无输出
         </p>
-        <p className="text-[10px] text-zinc-700 mt-2 font-mono">
-          Awaiting synthesis command...
+        <p className="text-xs text-gray-400 mt-2">
+          生成的语音将显示在这里
         </p>
-
-        {/* Decorative waveform */}
-        <div className="mt-6 w-full max-w-xs h-8 flex items-center justify-center gap-0.5 opacity-20">
-          {Array.from({ length: 40 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-1 bg-gradient-to-t from-neon-purple to-neon-cyan rounded-sm"
-              style={{ height: `${Math.random() * 20 + 4}px` }}
-            />
-          ))}
-        </div>
       </div>
     );
   }
@@ -55,28 +45,25 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
     <div className={`space-y-4 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-sm bg-gradient-to-br from-neon-purple to-neon-cyan" />
-          <h3 className="text-sm font-medium text-zinc-300 uppercase tracking-wide">Output</h3>
-        </div>
-        <span className="text-[10px] text-zinc-600 font-mono">
-          RESULTS: {sessionResults.length}
+        <h3 className="text-sm font-medium text-gray-700">输出结果</h3>
+        <span className="text-xs text-gray-400">
+          {sessionResults.length} 条记录
         </span>
       </div>
 
       <AnimatePresence mode="popLayout">
-        {sessionResults.map((result) => (
+        {sessionResults.map((result: AudioResultType) => (
           <motion.div
             key={result.id}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, x: -100, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="p-4 bg-cyber-bg-secondary/50 rounded-md border border-zinc-800/50 space-y-3"
+            className="p-4 glass-card rounded-glass-sm space-y-3"
           >
             {/* Header */}
             <div className="flex items-start justify-between gap-3">
-              <p className="text-sm text-white line-clamp-2 flex-1 font-mono">
+              <p className="text-sm text-gray-700 line-clamp-2 flex-1">
                 "{result.text}"
               </p>
               <div className="flex items-center gap-1">
@@ -84,8 +71,8 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => handleDownload(result.audioUrl, result.text)}
-                  className="p-2 text-zinc-500 hover:text-neon-purple hover:bg-neon-purple/10 rounded-md transition-colors cursor-pointer"
-                  title="Download"
+                  className="p-2 text-gray-400 hover:text-dopamine-purple hover:bg-dopamine-purple/10 rounded-lg transition-colors cursor-pointer"
+                  title="下载"
                 >
                   <Download className="w-4 h-4" />
                 </motion.button>
@@ -93,8 +80,8 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => removeResult(result.id)}
-                  className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors cursor-pointer"
-                  title="Delete"
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                  title="删除"
                 >
                   <Trash2 className="w-4 h-4" />
                 </motion.button>
@@ -111,7 +98,7 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
             {/* Metadata */}
             <div className="flex items-center gap-2 flex-wrap">
               <Badge
-                variant={result.model === 'qwen3-tts' ? 'info' : 'purple'}
+                variant={result.model === 'qwen3-tts' ? 'purple' : 'pink'}
                 size="sm"
               >
                 <Cpu className="w-3 h-3 mr-1" />
@@ -121,20 +108,20 @@ export default function AudioResult({ className = '' }: AudioResultProps) {
                 {result.voice}
               </Badge>
               {result.duration && (
-                <Badge variant="default" size="sm">
+                <Badge variant="blue" size="sm">
                   <Clock className="w-3 h-3 mr-1" />
-                  {result.duration.toFixed(1)}s
+                  {result.duration.toFixed(1)}秒
                 </Badge>
               )}
               {'emotion' in result && result.emotion && (
-                <Badge variant="purple" size="sm">
+                <Badge variant="mint" size="sm">
                   {result.emotion}
                 </Badge>
               )}
             </div>
 
-            {/* Tech footer */}
-            <div className="pt-2 border-t border-zinc-800/30 flex items-center justify-between text-[9px] text-zinc-600 font-mono">
+            {/* Footer */}
+            <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-[10px] text-gray-400">
               <span>ID: {result.id.slice(0, 8)}</span>
               <span>{new Date(result.timestamp).toLocaleTimeString()}</span>
             </div>

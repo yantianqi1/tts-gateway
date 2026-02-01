@@ -27,12 +27,12 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <head>
-        <title>TTS Gateway - Cyberpunk Voice Studio</title>
-        <meta name="description" content="Unified TTS Gateway with Qwen3-TTS and IndexTTS 2.0" />
+        <title>语音合成 - TTS Gateway</title>
+        <meta name="description" content="智能语音合成平台，支持 Qwen3-TTS 和 IndexTTS 2.0" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* JetBrains Mono for code/tech aesthetic */}
+        {/* Inter font for clean, modern look */}
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

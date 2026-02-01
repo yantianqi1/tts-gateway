@@ -30,16 +30,16 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
     const percentage = ((numericValue - Number(min)) / (Number(max) - Number(min))) * 100;
 
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         {(label || showValue) && (
           <div className="flex items-center justify-between">
             {label && (
-              <label htmlFor={id} className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
+              <label htmlFor={id} className="text-sm font-medium text-gray-600">
                 {label}
               </label>
             )}
             {showValue && (
-              <span className="text-xs font-mono text-neon-purple">
+              <span className="text-sm font-semibold text-dopamine-purple">
                 {valueFormatter(numericValue)}
               </span>
             )}
@@ -49,30 +49,13 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         {/* Slider track container */}
         <div className="relative h-8 flex items-center">
           {/* Background track */}
-          <div className="absolute inset-x-0 h-2 bg-zinc-800/50 rounded-sm" />
+          <div className="absolute inset-x-0 h-2 bg-gray-200/50 rounded-full" />
 
-          {/* Filled track */}
+          {/* Filled track with gradient */}
           <div
-            className="absolute left-0 h-2 rounded-sm bg-gradient-to-r from-neon-purple to-neon-cyan"
+            className="absolute left-0 h-2 rounded-full bg-gradient-dopamine"
             style={{ width: `${percentage}%` }}
           />
-
-          {/* Glow effect on filled track */}
-          <div
-            className="absolute left-0 h-2 rounded-sm bg-gradient-to-r from-neon-purple to-neon-cyan blur-sm opacity-40"
-            style={{ width: `${percentage}%` }}
-          />
-
-          {/* Tick marks */}
-          <div className="absolute inset-x-0 h-2 flex items-center pointer-events-none">
-            {[0, 25, 50, 75, 100].map((tick) => (
-              <div
-                key={tick}
-                className="absolute w-px h-1 bg-zinc-600/50"
-                style={{ left: `${tick}%` }}
-              />
-            ))}
-          </div>
 
           {/* Input */}
           <input
@@ -83,14 +66,14 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             max={max}
             step={step}
             value={value}
-            className={`cyber-slider relative z-10 ${className}`}
+            className={`dopamine-slider relative z-10 ${className}`}
             {...props}
           />
         </div>
 
         {hint && (
-          <p className="text-[10px] text-zinc-600 font-mono">
-            <span className="text-neon-purple/50">$</span> {hint}
+          <p className="text-xs text-gray-400">
+            {hint}
           </p>
         )}
       </div>
