@@ -59,3 +59,4 @@ audio_output/
 
 # Config with secrets
 config/config.local.yaml
+pids/
