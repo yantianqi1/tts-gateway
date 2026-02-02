@@ -1001,7 +1001,7 @@ dev_gateway() {
     fi
 
     log_info "启动开发服务器 (端口 $GATEWAY_PORT)..."
-    python -m uvicorn gateway.main:app --host 0.0.0.0 --port $GATEWAY_PORT --reload
+    python3 -m uvicorn gateway.main:app --host 0.0.0.0 --port $GATEWAY_PORT --reload
 }
 
 # ============================================
