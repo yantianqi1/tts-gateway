@@ -1,5 +1,7 @@
 // API Response Types
 
+export type VoiceVisibility = 'public' | 'private';
+
 export interface TTSResponse {
   success: boolean;
   message: string;
@@ -16,6 +18,7 @@ export interface VoiceInfo {
   emotions: string[];
   ref_text?: string;
   has_default: boolean;
+  visibility: VoiceVisibility;
 }
 
 export interface VoicesResponse {
@@ -29,6 +32,13 @@ export interface VoiceUploadResponse {
   voice_id?: string;
   emotion?: string;
   backend?: string;
+  visibility?: VoiceVisibility;
+}
+
+export interface VerifyKeyResponse {
+  valid: boolean;
+  voice_count: number;
+  voice_ids: string[];
 }
 
 export interface BackendStatus {
@@ -102,6 +112,8 @@ export interface VoiceUploadRequest {
   emotion: string;
   ref_text?: string;
   backend: 'qwen3-tts' | 'indextts';
+  visibility?: VoiceVisibility;
+  private_key?: string;
 }
 
 // Partial request for frontend form

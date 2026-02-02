@@ -1,8 +1,11 @@
 """TTS 响应模型"""
 
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, Field
+
+# 可见性类型
+VoiceVisibility = Literal["public", "private"]
 
 
 class TTSResponse(BaseModel):
@@ -23,6 +26,7 @@ class VoiceInfo(BaseModel):
     emotions: List[str] = Field(default_factory=list, description="可用情感列表")
     ref_text: Optional[str] = Field(default=None, description="参考文本（Qwen3-TTS）")
     has_default: bool = Field(default=False, description="是否有默认音频")
+    visibility: VoiceVisibility = Field(default="public", description="可见性：public 或 private")
 
 
 class VoicesResponse(BaseModel):
@@ -38,6 +42,19 @@ class VoiceUploadResponse(BaseModel):
     voice_id: Optional[str] = None
     emotion: Optional[str] = None
     backend: Optional[str] = None
+    visibility: Optional[VoiceVisibility] = None
+
+
+class VerifyKeyRequest(BaseModel):
+    """密钥验证请求"""
+    private_key: str = Field(..., description="私人密钥")
+
+
+class VerifyKeyResponse(BaseModel):
+    """密钥验证响应"""
+    valid: bool = Field(..., description="密钥是否有效")
+    voice_count: int = Field(default=0, description="可访问的音色数量")
+    voice_ids: List[str] = Field(default_factory=list, description="可访问的音色 ID 列表")
 
 
 class BackendStatus(BaseModel):

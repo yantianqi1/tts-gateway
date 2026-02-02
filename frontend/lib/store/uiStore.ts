@@ -2,6 +2,8 @@
 
 import { create } from 'zustand';
 
+type VoicesTab = 'all' | 'public' | 'private' | 'qwen3-tts' | 'indextts';
+
 interface UIState {
   // Sidebar state
   sidebarCollapsed: boolean;
@@ -13,7 +15,7 @@ interface UIState {
   activePanel: 'settings' | 'results';
 
   // Selected tab in voices page
-  voicesTab: 'all' | 'qwen3-tts' | 'indextts';
+  voicesTab: VoicesTab;
 
   // Modal states
   modals: {
@@ -27,7 +29,7 @@ interface UIState {
   setSidebarCollapsed: (collapsed: boolean) => void;
   setIsGenerating: (generating: boolean) => void;
   setActivePanel: (panel: 'settings' | 'results') => void;
-  setVoicesTab: (tab: 'all' | 'qwen3-tts' | 'indextts') => void;
+  setVoicesTab: (tab: VoicesTab) => void;
   openModal: (modal: keyof UIState['modals']) => void;
   closeModal: (modal: keyof UIState['modals']) => void;
   closeAllModals: () => void;

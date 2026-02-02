@@ -2,16 +2,20 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Plus, Search, RefreshCw } from 'lucide-react';
+import { Users, Plus, Search, RefreshCw, Lock, Unlock } from 'lucide-react';
 import { useVoices } from '@/lib/hooks/useVoices';
 import { useUIStore } from '@/lib/store/uiStore';
+import { usePrivateKeyStore } from '@/lib/store/privateKeyStore';
 import VoiceCard from '@/components/voices/VoiceCard';
 import VoiceUploader from '@/components/voices/VoiceUploader';
+import PrivateKeyModal from '@/components/voices/PrivateKeyModal';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 
 const TABS = [
   { id: 'all', label: '全部' },
+  { id: 'public', label: '公共' },
+  { id: 'private', label: '私人' },
   { id: 'qwen3-tts', label: 'Qwen3-TTS' },
   { id: 'indextts', label: 'IndexTTS 2.0' },
 ] as const;
@@ -19,7 +23,9 @@ const TABS = [
 export default function VoicesPage() {
   const { data: voices, isLoading, refetch } = useVoices();
   const { voicesTab, setVoicesTab, modals, openModal, closeModal } = useUIStore();
+  const { activeKey, unlockedCount } = usePrivateKeyStore();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showKeyModal, setShowKeyModal] = useState(false);
 
   // Filter voices based on tab and search
   const filteredVoices = useMemo(() => {
@@ -28,7 +34,11 @@ export default function VoicesPage() {
     let filtered = voices;
 
     // Filter by tab
-    if (voicesTab !== 'all') {
+    if (voicesTab === 'public') {
+      filtered = filtered.filter((v) => v.visibility === 'public');
+    } else if (voicesTab === 'private') {
+      filtered = filtered.filter((v) => v.visibility === 'private');
+    } else if (voicesTab !== 'all') {
       filtered = filtered.filter((v) => v.backend === voicesTab);
     }
 
@@ -48,7 +58,7 @@ export default function VoicesPage() {
 
   // Group by backend for display
   const groupedVoices = useMemo(() => {
-    if (voicesTab !== 'all') {
+    if (voicesTab !== 'all' && voicesTab !== 'public' && voicesTab !== 'private') {
       return { [voicesTab]: filteredVoices };
     }
 
@@ -61,6 +71,11 @@ export default function VoicesPage() {
     });
     return groups;
   }, [filteredVoices, voicesTab]);
+
+  // Count private voices
+  const privateVoiceCount = useMemo(() => {
+    return voices?.filter((v) => v.visibility === 'private').length || 0;
+  }, [voices]);
 
   return (
     <div className="min-h-screen p-4 lg:p-6">
@@ -79,11 +94,27 @@ export default function VoicesPage() {
               <h1 className="text-title-2">音色管理</h1>
               <p className="text-footnote text-text-secondary">
                 管理 {voices?.length || 0} 个音色
+                {privateVoiceCount > 0 && (
+                  <span className="ml-1 text-ios-orange">
+                    （含 {privateVoiceCount} 个私人）
+                  </span>
+                )}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
+            {/* 私人库解锁按钮 */}
+            <Button
+              variant={activeKey ? 'primary' : 'tinted'}
+              size="sm"
+              onClick={() => setShowKeyModal(true)}
+              leftIcon={activeKey ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+              className={activeKey ? 'bg-ios-green hover:bg-ios-green/90' : ''}
+            >
+              {activeKey ? `已解锁 ${unlockedCount}` : '解锁私人库'}
+            </Button>
+
             <Button
               variant="tinted"
               size="sm"
@@ -116,6 +147,7 @@ export default function VoicesPage() {
                   voicesTab === tab.id ? 'active' : ''
                 }`}
               >
+                {tab.id === 'private' && <Lock className="w-3 h-3 mr-1" />}
                 {tab.label}
               </motion.button>
             ))}
@@ -150,9 +182,25 @@ export default function VoicesPage() {
           <Users className="ios-empty-icon" />
           <h3 className="ios-empty-title">暂无音色</h3>
           <p className="ios-empty-description">
-            {searchQuery ? '没有匹配的搜索结果' : '上传您的第一个音色开始使用'}
+            {searchQuery
+              ? '没有匹配的搜索结果'
+              : voicesTab === 'private'
+              ? activeKey
+                ? '当前密钥下没有私人音色'
+                : '请先解锁私人库以查看私人音色'
+              : '上传您的第一个音色开始使用'}
           </p>
-          {!searchQuery && (
+          {!searchQuery && voicesTab === 'private' && !activeKey && (
+            <Button
+              variant="primary"
+              onClick={() => setShowKeyModal(true)}
+              leftIcon={<Lock className="w-4 h-4" />}
+              className="mt-4"
+            >
+              解锁私人库
+            </Button>
+          )}
+          {!searchQuery && voicesTab !== 'private' && (
             <Button
               variant="primary"
               onClick={() => openModal('voiceUpload')}
@@ -173,7 +221,7 @@ export default function VoicesPage() {
               exit={{ opacity: 0, y: -20 }}
               className="mb-8"
             >
-              {voicesTab === 'all' && (
+              {(voicesTab === 'all' || voicesTab === 'public' || voicesTab === 'private') && (
                 <h2 className="text-headline text-text-primary mb-4 flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${
@@ -204,6 +252,12 @@ export default function VoicesPage() {
       <VoiceUploader
         isOpen={modals.voiceUpload}
         onClose={() => closeModal('voiceUpload')}
+      />
+
+      {/* Private Key Modal */}
+      <PrivateKeyModal
+        isOpen={showKeyModal}
+        onClose={() => setShowKeyModal(false)}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { User, Mic2, Play, Trash2 } from 'lucide-react';
+import { User, Mic2, Play, Trash2, Lock } from 'lucide-react';
 import type { VoiceInfo } from '@/types/api';
 import Badge from '@/components/ui/Badge';
 
@@ -20,17 +20,19 @@ export default function VoiceCard({
   isPlaying = false,
   className = '',
 }: VoiceCardProps) {
+  const isPrivate = voice.visibility === 'private';
+
   return (
     <motion.div
       whileTap={{ scale: 0.99 }}
-      className={`ios-card p-4 ${className}`}
+      className={`ios-card p-4 ${isPrivate ? 'border-ios-orange/30' : ''} ${className}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div
             className={`
-              w-12 h-12 rounded-ios-md flex items-center justify-center
+              w-12 h-12 rounded-ios-md flex items-center justify-center relative
               ${
                 voice.backend === 'qwen3-tts'
                   ? 'bg-ios-purple/15'
@@ -51,9 +53,22 @@ export default function VoiceCard({
                 }`}
               />
             )}
+            {/* 私人音色锁图标 */}
+            {isPrivate && (
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-ios-orange rounded-full flex items-center justify-center">
+                <Lock className="w-2.5 h-2.5 text-white" />
+              </div>
+            )}
           </div>
           <div>
-            <h3 className="text-subheadline font-semibold text-text-primary">{voice.name}</h3>
+            <div className="flex items-center gap-1.5">
+              <h3 className="text-subheadline font-semibold text-text-primary">{voice.name}</h3>
+              {isPrivate && (
+                <Badge variant="warning" size="sm">
+                  私人
+                </Badge>
+              )}
+            </div>
             <Badge
               variant={voice.backend === 'qwen3-tts' ? 'info' : 'purple'}
               size="sm"

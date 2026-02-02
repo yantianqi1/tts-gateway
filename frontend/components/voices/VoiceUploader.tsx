@@ -2,11 +2,12 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, X, Mic2, FileAudio } from 'lucide-react';
+import { Upload, X, Mic2, FileAudio, Lock, Globe, AlertTriangle } from 'lucide-react';
 import { useUploadVoice } from '@/lib/hooks/useVoices';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
+import type { VoiceVisibility } from '@/types/api';
 
 interface VoiceUploaderProps {
   isOpen: boolean;
@@ -20,6 +21,11 @@ export default function VoiceUploader({ isOpen, onClose }: VoiceUploaderProps) {
   const [emotion, setEmotion] = useState('default');
   const [refText, setRefText] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  // 新增：可见性和私人密钥
+  const [visibility, setVisibility] = useState<VoiceVisibility>('public');
+  const [privateKey, setPrivateKey] = useState('');
+  const [confirmKey, setConfirmKey] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: uploadVoice, isPending } = useUploadVoice();
@@ -54,6 +60,18 @@ export default function VoiceUploader({ isOpen, onClose }: VoiceUploaderProps) {
       return;
     }
 
+    // 私人音色验证
+    if (visibility === 'private') {
+      if (!privateKey || privateKey.length < 4) {
+        setError('私人密钥至少需要 4 个字符');
+        return;
+      }
+      if (privateKey !== confirmKey) {
+        setError('两次输入的密钥不一致');
+        return;
+      }
+    }
+
     uploadVoice(
       {
         file,
@@ -62,6 +80,8 @@ export default function VoiceUploader({ isOpen, onClose }: VoiceUploaderProps) {
         options: {
           emotion: backend === 'indextts' ? emotion : undefined,
           refText: backend === 'qwen3-tts' ? refText : undefined,
+          visibility,
+          privateKey: visibility === 'private' ? privateKey : undefined,
         },
       },
       {
@@ -71,13 +91,16 @@ export default function VoiceUploader({ isOpen, onClose }: VoiceUploaderProps) {
           setVoiceId('');
           setEmotion('default');
           setRefText('');
+          setVisibility('public');
+          setPrivateKey('');
+          setConfirmKey('');
         },
         onError: (err) => {
           setError(err instanceof Error ? err.message : '上传失败');
         },
       }
     );
-  }, [file, voiceId, backend, emotion, refText, uploadVoice, onClose]);
+  }, [file, voiceId, backend, emotion, refText, visibility, privateKey, confirmKey, uploadVoice, onClose]);
 
   const handleClearFile = useCallback(() => {
     setFile(null);
@@ -99,6 +122,78 @@ export default function VoiceUploader({ isOpen, onClose }: VoiceUploaderProps) {
             { value: 'qwen3-tts', label: 'Qwen3-TTS' },
           ]}
         />
+
+        {/* Visibility selection */}
+        <div className="space-y-2">
+          <label className="text-subheadline text-text-primary">音色库类型</label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setVisibility('public')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-ios-md border-2 transition-all ${
+                visibility === 'public'
+                  ? 'border-ios-blue bg-ios-blue/10 text-ios-blue'
+                  : 'border-separator-opaque bg-fill-tertiary text-text-secondary hover:border-ios-blue/50'
+              }`}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-subheadline font-medium">公共库</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisibility('private')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-ios-md border-2 transition-all ${
+                visibility === 'private'
+                  ? 'border-ios-orange bg-ios-orange/10 text-ios-orange'
+                  : 'border-separator-opaque bg-fill-tertiary text-text-secondary hover:border-ios-orange/50'
+              }`}
+            >
+              <Lock className="w-4 h-4" />
+              <span className="text-subheadline font-medium">私人库</span>
+            </button>
+          </div>
+          <p className="text-caption-1 text-text-tertiary">
+            {visibility === 'public'
+              ? '公共库：所有人都可以看到和使用此音色'
+              : '私人库：需要密钥才能访问此音色'}
+          </p>
+        </div>
+
+        {/* Private key inputs (only show when private) */}
+        {visibility === 'private' && (
+          <div className="space-y-3 p-4 bg-ios-orange/5 border border-ios-orange/20 rounded-ios-md">
+            <div className="flex items-start gap-2 text-ios-orange">
+              <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+              <p className="text-caption-1">
+                请牢记您的私人密钥，密钥丢失后将无法访问此音色
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-subheadline text-text-primary">私人密钥</label>
+              <input
+                type="password"
+                value={privateKey}
+                onChange={(e) => setPrivateKey(e.target.value)}
+                placeholder="设置访问密钥（至少 4 位）"
+                className="ios-input w-full"
+                autoComplete="new-password"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-subheadline text-text-primary">确认密钥</label>
+              <input
+                type="password"
+                value={confirmKey}
+                onChange={(e) => setConfirmKey(e.target.value)}
+                placeholder="再次输入密钥"
+                className="ios-input w-full"
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+        )}
 
         {/* File upload */}
         <div className="space-y-2">
